@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<phpunit bootstrap="./tests/bootstrap.php" colors="true">
+    <php>
+        <!-- Just placeholders for now... -->
+        <server name="API_KEY" value="" />
+        <server name="API_SECRET" value="" />
+    </php>
+    <testsuites>
+        <testsuite name="guzzle-service">
+            <directory suffix="Test.php">./Tests</directory>
+        </testsuite>
+    </testsuites>
+</phpunit>
