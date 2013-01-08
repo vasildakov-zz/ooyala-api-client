@@ -1,0 +1,13 @@
+{
+    "name": "Ooyala",
+    "apiVersion": "v2",
+    "baseUrl": "/v2",
+    "description": "Ooyala is an API that allows you to interact with the Ooyala REST services.",
+    "operations": {
+        "GetAssets": {
+            "httpMethod": "GET",
+            "uri": "/assets",
+            "summary": "List Assets"
+        }
+    }
+}
