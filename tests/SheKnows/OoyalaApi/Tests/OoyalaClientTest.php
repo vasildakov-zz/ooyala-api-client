@@ -3,9 +3,8 @@
 namespace SheKnows\OoyalaApi\Tests;
 
 use SheKnows\OoyalaApi\OoyalaClient;
-use Guzzle\Tests\GuzzleTestCase;
 
-class OoyalaClientTest extends GuzzleTestCase
+class OoyalaClientTest extends BaseTestCase
 {
     /**
      * @var \SheKnows\OoyalaApi\OoyalaClient
@@ -14,7 +13,7 @@ class OoyalaClientTest extends GuzzleTestCase
 
     public function testValidClient()
     {
-        $this->assertInstanceOf('\SheKnows\OoyalaApi\OoyalaClient', $this->client);
+        $this->assertInstanceOf('\SheKnows\OoyalaApi\OoyalaClient', $this->getClient());
     }
 
     /**
@@ -93,8 +92,84 @@ class OoyalaClientTest extends GuzzleTestCase
         $this->assertEquals($expected, $request->getQuery()->get('signature'));
     }
 
-    protected function setUp()
+    public function testValidSignatureResponse()
     {
-        $this->client = $this->getServiceBuilder()->get('test.ooyala-client');
+        $client = $this->getClient();
+        $command = $client->getCommand('GetAssets');
+
+        /** @var $response \Guzzle\Http\Message\Response */
+        $client->execute($command);
+        $response = $command->getResponse();
+        // If the signature was correct, response should return a 200 status.
+        $this->assertEquals('200', $response->getStatusCode());
+    }
+
+    /**
+     * @group internet
+     * @expectedException Guzzle\Http\Exception\BadResponseException
+     */
+    public function testRequiredParameterMissingResponse()
+    {
+        $client = clone $this->getClient();
+        $command = $client->getCommand('GetAssets');
+
+        $beforeSend = function (\Guzzle\Common\Event $event) {
+            /** @var $request \Guzzle\Http\Message\Request */
+            $request = $event['request'];
+            $request->getQuery()
+                ->remove('expires')
+                ->remove('api_key')
+                ->remove('signature')
+            ;
+        };
+
+        // Very low priority so this runs after the OoyalaClient listener.
+        $client->getEventDispatcher()->addListener('request.before_send', $beforeSend, -9999999999);
+
+        try {
+            $response = $command->execute();
+        } catch (\Guzzle\Http\Exception\BadResponseException $e) {
+            $response = $e->getResponse();
+            $body = $response->getBody(true);
+            $this->assertEquals('{"message":"These parameters are missing: api_key, signature, expires."}', $body);
+
+            $client->getEventDispatcher()->removeListener('request.before_send', $beforeSend);
+
+            throw $e;
+        }
+    }
+
+    /**
+     * @expectedException Guzzle\Http\Exception\BadResponseException
+     * @group internet
+     */
+    public function testInvalidSignatureResponse()
+    {
+        $client = clone $this->getClient();
+        $command = $client->getCommand('GetAssets');
+
+        $beforeSend = function (\Guzzle\Common\Event $event) {
+            /** @var $request \Guzzle\Http\Message\Request */
+            $request =& $event['request'];
+            if ($request->getQuery()->hasKey('signature')) {
+                $request->getQuery()->set('signature', 'coocoocachoo!');
+            }
+        };
+
+        $client->getEventDispatcher()->addListener('request.before_send', $beforeSend, -9999999999);
+
+        try {
+            $command->execute();
+        } catch (\Guzzle\Http\Exception\BadResponseException $e) {
+            $response = $e->getResponse();
+            $request = $e->getRequest();
+            $body = json_decode($response->getBody(true));
+            $this->assertObjectHasAttribute('message', $body);
+            $this->assertEquals($body->message, 'Invalid signature.');
+
+            $client->getEventDispatcher()->removeListener('request.before_send', $beforeSend);
+
+            throw $e;
+        }
     }
 }
