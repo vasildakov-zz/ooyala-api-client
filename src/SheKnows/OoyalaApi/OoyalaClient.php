@@ -18,7 +18,7 @@ class OoyalaClient extends Client
     public static function factory($config = array())
     {
         $defaults = array(
-            'base_url' => 'https://api.ooyala.com',
+            'base_url' => 'https://api.ooyala.com/{api_version}',
             'api_version' => 'v2',
         );
 
@@ -36,35 +36,48 @@ class OoyalaClient extends Client
         $client->setDescription($description);
 
         // Lowest priority since all GET params must be included, and perhaps other listeners might add some.
-        $client->getEventDispatcher()->addListener('command.before_send', array(&$client, 'onRequestCreate'), -9999);
+        $client->getEventDispatcher()->addListener('request.before_send', array(&$client, 'onRequestBeforeSend'), -9999);
 
         return $client;
     }
 
-    public function onRequestCreate(Event $event)
+    public function onRequestBeforeSend(Event $event)
     {
-        /** @var $command \Guzzle\Service\Command\CommandInterface */
-        $command = $event['command'];
-        $request = $command->getRequest();
+        /** @var $request \Guzzle\Http\Message\Request */
+        $request = $event['request'];
 
-        $request->getParams()->add('signature', $this->signRequest($request));
+        $request->getQuery()
+            ->set('api_key', $this->apiKey)
+            ->set('expires', strtotime('+15 minutes'))
+        ;
+
+        // Sign the request
+        $this->signRequest($request);
     }
 
     /**
      * Sign the request per Ooyala's specifications
      *
      * @link http://support.ooyala.com/developers/documentation/tasks/api_signing_requests.html
+     * @link http://support.ooyala.com/developers/documentation/api/signature_php.html
      *
      * @param \Guzzle\Http\Message\Request $request
      *
-     * @return string
+     *
+     * @return string Signature hash derived from the Request.
      */
-    final private function signRequest(Request $request)
+    final public function signRequest(Request $request)
     {
-        $parameters = $request->getParams()->toArray();
+        $hash = $this->hashSignature($this->getRawSignature($request));
+        $request->getQuery()->set('signature', $hash);
+    }
+
+    final public function getRawSignature(Request $request)
+    {
+        $parameters = $request->getQuery()->toArray();
         $keys = $this->sortKeys($parameters);
 
-        $to_sign = $this->apiKey . $request->getMethod() . $request->getPath();
+        $to_sign = $this->apiSecret . $request->getMethod() . $request->getPath();
         foreach ($keys as $key) {
             $to_sign .= $key . "=" . $parameters[$key];
         }
@@ -74,14 +87,26 @@ class OoyalaClient extends Client
             $to_sign .= $request->getBody();
         }
 
-        $hash = hash("sha256", $to_sign, true);
+        return $to_sign;
+    }
+
+    final public function hashSignature($rawSignature)
+    {
+        $hash = hash("sha256", $rawSignature, true);
         $base = base64_encode($hash);
         $base = substr($base, 0, 43);
-        $base = urlencode($base);
 
         return $base;
     }
 
+    /**
+     * Convenience function to sort request parameter keys in order.
+     * The order of request parameters is important to generating a valid request signature.
+     *
+     * @param array $array
+     *
+     * @return array
+     */
     private function sortKeys(array $array)
     {
         $keys = array();
