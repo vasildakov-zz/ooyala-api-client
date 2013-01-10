@@ -4,7 +4,10 @@ namespace SheKnows\OoyalaApi\Tests\Command;
 
 use SheKnows\OoyalaApi\Tests\BaseTestCase;
 
-class AssetTest extends BaseTestCase
+/**
+ * Tests for the Asset commands
+ */
+class AssetTests extends BaseTestCase
 {
 
     public function testValidIncludeParam()
