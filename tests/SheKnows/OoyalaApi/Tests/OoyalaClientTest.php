@@ -43,55 +43,6 @@ class OoyalaClientTest extends BaseTestCase
         $this->assertInstanceOf('SheKnows\OoyalaApi\OoyalaClient', $client);
     }
 
-    /**
-     * Attempt at testing the raw signature value before it's hashed.
-     *
-     * Signatures should match Ooyala's {@link http://support.ooyala.com/developers/documentation/tasks/api_signing_requests.html Signing Request Algorithm}.
-     */
-    public function testValidRawSignature()
-    {
-        $method = 'GET';
-        $path   = '/my/path';
-        $key    = '123';
-        $secret = '456';
-        // Purposely out of order to test sorting from the Response object query params.
-        $queryParams = array(
-            'fake'     => 'fake,param',
-            'another'  => '123',
-            'key'      => $key
-        );
-
-        $client = OoyalaClient::factory(array(
-            'api_key'     => $key,
-            'api_secret'  => $secret,
-        ));
-
-        $request = new \Guzzle\Http\Message\Request($method, $path);
-        foreach ($queryParams as $key => $val) {
-            $request->getQuery()->set($key, $val);
-            unset($key, $val);
-        }
-
-        // Build expected signature by hand to simulate what \SheKnows\OoyalaApi\OoyalaClient::getRawSignature() does.
-        // @see \SheKnows\OoyalaApi\OoyalaClient::signRequest() for more details.
-        $expected = $secret . $method . $path;
-        ksort($queryParams); // Sort manually, kind of makes for an ugly test :/
-        foreach ($queryParams as $key => $val) {
-            $expected .= "{$key}={$val}";
-        }
-
-        $this->assertEquals(
-            $expected,
-            $client->getRawSignature($request),
-            'Raw signature should match {secret} + {HttpMethod} + {UriPath} + {ordered_query_params}'
-        );
-
-        // Compare generated signatures
-        $expected = $client->hashSignature($expected);
-        $client->signRequest($request);
-        $this->assertEquals($expected, $request->getQuery()->get('signature'));
-    }
-
     public function testValidSignatureResponse()
     {
         $client = $this->getClient();
@@ -147,7 +98,7 @@ class OoyalaClientTest extends BaseTestCase
      */
     public function testInvalidSignatureResponse()
     {
-        $client = clone $this->getClient();
+        $client = $this->getClient();
         $command = $client->getCommand('GetAssets', array(
             'limit' => 1
         ));
@@ -156,7 +107,8 @@ class OoyalaClientTest extends BaseTestCase
             /** @var $request \Guzzle\Http\Message\Request */
             $request =& $event['request'];
             if ($request->getQuery()->hasKey('signature')) {
-                $request->getQuery()->set('signature', $client->hashSignature('coocoocachoo'));
+                // Set an invalid signature
+                $request->getQuery()->set('signature', strrev($request->getQuery()->get('signature')));
             }
         };
 
@@ -170,10 +122,30 @@ class OoyalaClientTest extends BaseTestCase
             $body = json_decode($response->getBody(true));
             $this->assertObjectHasAttribute('message', $body);
             $this->assertEquals($body->message, 'Invalid signature.');
-            $this->assertEquals(401, $response->getStatusCode(), 'Invalid signature should return a 401 response code.');
+            $this->assertEquals(400, $response->getStatusCode(), 'Invalid signature should return a 400 response code.');
             $client->getEventDispatcher()->removeListener('request.before_send', $beforeSend);
 
             throw $e;
+        }
+    }
+
+    /**
+     * Test that an invalid API key returns a 401 response
+     */
+    public function testInvalidApiKeyException()
+    {
+        $client = $this->getClient();
+        $client->getConfig()->set('aki_key', 'your_argument_is_invalid');
+        $command = $client->getCommand('GetAssets', array(
+            'limit' => 1
+        ));
+
+        try {
+            $command->execute();
+        } catch (\Exception $e) {
+            $response = $e->getResponse();
+            $body = json_decode($response->getBody(true));
+            $data = $body;
         }
     }
 }
