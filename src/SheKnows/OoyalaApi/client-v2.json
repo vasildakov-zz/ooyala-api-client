@@ -8,9 +8,18 @@
             "uri": "assets{?include}",
             "description": "List Assets",
             "parameters": {
-                "include": {
+                "where": {
                     "location": "query",
                     "type": "string"
+                },
+                "include": {
+                    "location": "query",
+                    "type": "string",
+                    "pattern": "/^(metadata,labels|labels,metadata|metadata|labels)$/"
+                },
+                "limit": {
+                    "location": "query",
+                    "type": "integer"
                 }
             }
         }

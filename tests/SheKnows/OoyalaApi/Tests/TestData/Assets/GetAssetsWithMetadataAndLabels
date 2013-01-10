@@ -1,0 +1,20 @@
+HTTP/1.1 200 OK
+Server: nginx/1.2.3
+Date: Thu, 10 Jan 2013 00:06:58 GMT
+Content-Type: application/json
+Content-Length: 819
+Connection: keep-alive
+Status: 200 OK, 200 OK
+Ooyala-Server-Id: i-1880e062,i-74e0a20c
+Cache-Control: no-cache
+X-Ratelimit-Credits: 297
+X-Ratelimit-Reset: 60
+Ooyala-Request-Id: 8b0c7db3db09282a362873941faf47f0
+X-Varnish-IP: 10.28.97.158
+Accept-Ranges: bytes
+X-Varnish: 2176221808
+Via: 1.1 varnish
+age: 0
+X-Varnish-Cache: MISS
+
+{"next_page":"/v2/assets?include=metadata&limit=1&page_token=1357258836%3B51ZzQyODrdikMToAsLWx6OiYGYulDfB5","items":[{"status":"live","external_id":"site:58:date:2013:vid:622717","hosted_at":null,"description":"Danny Seo shows you how to make a body scrub using coffee, brown sugar, and lavender.","ad_set_id":"e4793449288041d9b5dbf45bab367108","time_restrictions":null,"asset_type":"video","embed_code":"51ZzQyODrdikMToAsLWx6OiYGYulDfB5","original_file_name":"622717.mp4","preview_image_url":"http://ak.c.ooyala.com/51ZzQyODrdikMToAsLWx6OiYGYulDfB5/promo181527649","duration":264428,"created_at":"2013-01-04T00:20:36Z","name":"Leftover Coffee Magic - Daily Dish","publishing_rule_id":"f9ff603f8f1f4cc8bd1e7ab6e76a365b","updated_at":"2013-01-09T16:11:46Z","metadata":{"meep":"test","another metadata field":"test 2"}}]}

@@ -111,7 +111,9 @@ class OoyalaClientTest extends BaseTestCase
     public function testRequiredParameterMissingResponse()
     {
         $client = clone $this->getClient();
-        $command = $client->getCommand('GetAssets');
+        $command = $client->getCommand('GetAssets', array(
+            'limit' => 1
+        ));
 
         $beforeSend = function (\Guzzle\Common\Event $event) {
             /** @var $request \Guzzle\Http\Message\Request */
@@ -146,7 +148,9 @@ class OoyalaClientTest extends BaseTestCase
     public function testInvalidSignatureResponse()
     {
         $client = clone $this->getClient();
-        $command = $client->getCommand('GetAssets');
+        $command = $client->getCommand('GetAssets', array(
+            'limit' => 1
+        ));
 
         $beforeSend = function (\Guzzle\Common\Event $event) {
             /** @var $request \Guzzle\Http\Message\Request */

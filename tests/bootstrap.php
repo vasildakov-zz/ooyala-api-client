@@ -7,12 +7,20 @@ $loader->add('SheKnows\\OoyalaApi\\Tests', dirname(__DIR__) . '/tests');
 
 Guzzle\Tests\GuzzleTestCase::setServiceBuilder(
     Guzzle\Service\Builder\ServiceBuilder::factory(array(
-        'test.ooyala-client' => array(
+        'live.ooyala-client' => array(
             'class' => 'SheKnows\\OoyalaApi\\OoyalaClient',
             'params' => array(
                 'api_key' => $_SERVER['API_KEY'],
                 'api_secret' => $_SERVER['API_SECRET'],
             ),
+        ),
+        'mock.ooyala-client' => array(
+            'class' => 'SheKnows\\OoyalaApi\\OoyalaClient',
+            'params' => array(
+                'api_key'    => '123',
+                'api_secret' => '456',
+                'base_url'   => 'http://test.local'
+            )
         )
     ))
 );

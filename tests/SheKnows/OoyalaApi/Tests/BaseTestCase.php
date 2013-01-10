@@ -2,6 +2,8 @@
 
 namespace SheKnows\OoyalaApi\Tests;
 
+use SheKnows\OoyalaApi\OoyalaClient;
+
 use Guzzle\Tests\GuzzleTestCase;
 
 abstract class BaseTestCase extends GuzzleTestCase
@@ -26,7 +28,17 @@ abstract class BaseTestCase extends GuzzleTestCase
      */
     protected function getClient()
     {
-        return $this->getServiceBuilder()->get('test.ooyala-client');
+        return $this->getServiceBuilder()->get('live.ooyala-client');
+    }
+
+    /**
+     * Used to make mock requests.
+     *
+     * @return \Guzzle\Service\ClientInterface
+     */
+    protected function getMockClient()
+    {
+        return $this->getServiceBuilder()->get('mock.ooyala-client');
     }
 
 }

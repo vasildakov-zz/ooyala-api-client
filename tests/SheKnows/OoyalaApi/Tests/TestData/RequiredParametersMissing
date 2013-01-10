@@ -1,0 +1,16 @@
+HTTP/1.1 400 Bad Request
+Server: nginx/1.0.0
+Date: Wed, 09 Jan 2013 20:27:38 GMT
+Content-Type: application/json
+Connection: keep-alive
+Status: 400 Bad Request
+Ooyala-Server-Id: i-f0e3a188
+Ooyala-Request-Id: c9eb76577e738af522d6b17cccad6862
+Content-Length: 72
+Accept-Ranges: bytes
+X-Varnish: 2175576730
+Age: 0
+Via: 1.1 varnish
+X-Varnish-Cache: MISS
+
+{"message":"These parameters are missing: api_key, signature, expires."}
