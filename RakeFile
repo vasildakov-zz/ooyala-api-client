@@ -6,20 +6,32 @@ end
 namespace :build do
   desc "Build API documentation"
   task :api do
+     Rake::Task["composer:dev"].invoke
      sh "php ./vendor/sami/sami/sami.php update ./api/config.php"
   end
 end
 
-desc "Install composer dependencies"
-task :composer do
-  sh "curl -s https://getcomposer.org/installer | php" unless File.exist?('composer.phar')
-  sh "./composer.phar install"
-end
+namespace :composer do
+  # Helper method
+  def has_composer?
+    File.exist?('./composer.phar')
+  end
 
-desc "Install composer dependencies + dev dependencies"
-task "composer:dev" do
-  sh "curl -s https://getcomposer.org/installer | php" unless File.exist?('composer.phar')
-  sh "./composer.phar install --dev"
+  def get_composer
+    sh "curl -s https://getcomposer.org/installer | php"
+  end
+
+  desc "Install composer dependencies"
+  task :install do
+    get_composer unless has_composer?
+    sh "./composer.phar install"
+  end
+
+  desc "Install composer dependencies + dev dependencies"
+  task :dev do
+    get_composer unless has_composer?
+    sh "./composer.phar install --dev"
+  end
 end
 
 namespace :test do
