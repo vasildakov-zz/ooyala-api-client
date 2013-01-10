@@ -8,24 +8,37 @@ namespace :build do
   task :api do
      sh "php ./vendor/sami/sami/sami.php update ./api/config.php"
   end
-  task :composer do
-    sh "curl -s https://getcomposer.org/installer | php" unless File.exist?('composer.phar')
-    sh "./composer.phar install"
-  end
+end
+
+desc "Install composer dependencies"
+task :composer do
+  sh "curl -s https://getcomposer.org/installer | php" unless File.exist?('composer.phar')
+  sh "./composer.phar install"
+end
+
+desc "Install composer dependencies + dev dependencies"
+task "composer:dev" do
+  sh "curl -s https://getcomposer.org/installer | php" unless File.exist?('composer.phar')
+  sh "./composer.phar install --dev"
 end
 
 namespace :test do
+
   phpunit = "phpunit --configuration ./phpunit.xml"
+
   desc "Run entire test suite."
   task :all do
+    Rake::Task["composer:dev"].invoke
     sh "#{phpunit} ./tests"
   end
   desc "Run Mocked responses and tests that do not require internet access"
   task :offline do
+    Rake::Task["composer:dev"].invoke
     sh "#{phpunit} --exclude-group internet ./tests"
   end
   desc "Run mission-critical tests against the live ooyala API."
   task :internet do
+    Rake::Task["composer:dev"].invoke
     sh "#{phpunit} --group internet ./tests"
   end
 end
