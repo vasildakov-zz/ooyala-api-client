@@ -16,6 +16,9 @@
         "php": ">=5.3.2",
         "guzzle/guzzle": "3.0.*"
     },
+    "require-dev": {
+        "sami/sami": "dev-master"
+    },
     "autoload": {
         "psr-0": { "SheKnows\\OoyalaApi": "/src" }
     }
