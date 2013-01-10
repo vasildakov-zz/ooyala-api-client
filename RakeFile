@@ -1,0 +1,27 @@
+task :default => 'tasklist'
+task :tasklist do
+  sh "rake -T"
+end
+
+namespace :build do
+  desc "Build API documentation"
+  task :api do
+     sh "php ./vendor/sami/sami/sami.php update ./api/config.php"
+  end
+end
+
+namespace :test do
+  phpunit = "phpunit --configuration ./phpunit.xml"
+  desc "Run entire test suite."
+  task :all do
+    sh "#{phpunit} ./tests"
+  end
+  desc "Run Mocked responses and tests that do not require internet access"
+  task :offline do
+    sh "#{phpunit} --exclude-group internet ./tests"
+  end
+  desc "Run mission-critical tests against the live ooyala API."
+  task :internet do
+    sh "#{phpunit} --group internet ./tests"
+  end
+end
