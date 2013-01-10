@@ -130,7 +130,10 @@ class OoyalaClientTest extends BaseTestCase
     }
 
     /**
-     * Test that an invalid API key returns a 401 response
+     * Test that an invalid API key returns a 401 response.
+     *
+     * @expectedException Guzzle\Http\Exception\ClientErrorResponseException
+     * @group internet
      */
     public function testInvalidApiKeyException()
     {
@@ -140,12 +143,31 @@ class OoyalaClientTest extends BaseTestCase
             'limit' => 1
         ));
 
+        $beforeSend = function (\Guzzle\Common\Event $event) {
+            /** @var $request \Guzzle\Http\Message\Request */
+            $request = $event['request'];
+            $request
+                ->getQuery()
+                ->set('api_key', 'your_argument_is_invalid')
+            ;
+        };
+
+        $client->getEventDispatcher()->addListener('request.before_send', $beforeSend, -9999999999);
+
         try {
             $command->execute();
-        } catch (\Exception $e) {
+        } catch (\Guzzle\Http\Exception\ClientErrorResponseException $e) {
             $response = $e->getResponse();
             $body = json_decode($response->getBody(true));
-            $data = $body;
+            $this->assertEquals(401, $response->getStatusCode());
+            $this->assertObjectHasAttribute('message', $body);
+            $this->assertEquals('Invalid API key.', $body->message);
+
+            $client->getEventDispatcher()->removeListener('request.before_send', $beforeSend);
+
+            throw $e;
         }
+
+        $this->fail("Invalid 'api_key' parameter should raise '\Guzzle\Http\Exception\ClientErrorResponseException' exception.");
     }
 }

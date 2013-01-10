@@ -44,6 +44,11 @@ class OoyalaClient extends Client
         return $client;
     }
 
+    /**
+     * Set required 'api_key' and 'expires' params.
+     *
+     * @param \Guzzle\Common\Event $event
+     */
     public function onRequestBeforeSend(Event $event)
     {
         /** @var $request \Guzzle\Http\Message\Request */
