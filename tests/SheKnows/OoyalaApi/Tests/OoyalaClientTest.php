@@ -152,11 +152,11 @@ class OoyalaClientTest extends BaseTestCase
             'limit' => 1
         ));
 
-        $beforeSend = function (\Guzzle\Common\Event $event) {
+        $beforeSend = function (\Guzzle\Common\Event $event) use ($client) {
             /** @var $request \Guzzle\Http\Message\Request */
             $request =& $event['request'];
             if ($request->getQuery()->hasKey('signature')) {
-                $request->getQuery()->set('signature', 'coocoocachoo!');
+                $request->getQuery()->set('signature', $client->hashSignature('coocoocachoo'));
             }
         };
 
@@ -170,7 +170,7 @@ class OoyalaClientTest extends BaseTestCase
             $body = json_decode($response->getBody(true));
             $this->assertObjectHasAttribute('message', $body);
             $this->assertEquals($body->message, 'Invalid signature.');
-
+            $this->assertEquals(401, $response->getStatusCode(), 'Invalid signature should return a 401 response code.');
             $client->getEventDispatcher()->removeListener('request.before_send', $beforeSend);
 
             throw $e;
