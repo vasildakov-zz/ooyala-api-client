@@ -4,7 +4,7 @@ task :tasklist do
 end
 
 namespace :build do
-  desc "Build API documentation"
+  desc "Build API documentation using fabpot/sami"
   task :api do
      Rake::Task["composer:dev"].invoke
      sh "php ./vendor/sami/sami/sami.php update ./api/config.php"
@@ -54,3 +54,6 @@ namespace :test do
     sh "#{phpunit} --group internet ./tests"
   end
 end
+
+desc "Shortcut for test:all"
+task :test => ["test:all"]
