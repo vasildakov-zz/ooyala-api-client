@@ -2,3 +2,4 @@ phpunit.xml
 vendor/*
 api/build
 api/cache
+composer.phar

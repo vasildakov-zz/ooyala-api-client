@@ -8,6 +8,10 @@ namespace :build do
   task :api do
      sh "php ./vendor/sami/sami/sami.php update ./api/config.php"
   end
+  task :composer do
+    sh "curl -s https://getcomposer.org/installer | php" unless File.exist?('composer.phar')
+    sh "./composer.phar install"
+  end
 end
 
 namespace :test do
