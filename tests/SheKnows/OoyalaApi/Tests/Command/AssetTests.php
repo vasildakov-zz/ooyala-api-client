@@ -45,7 +45,7 @@ class AssetTests extends BaseTestCase
     /**
      * @expectedException Guzzle\Service\Exception\ValidationException
      */
-    public function testIncludeExceptionWithTrailingComma()
+    public function testIncludeWithTrailingCommaRaisesValidationException()
     {
         $client = $this->getMockClient();
         $this->setMockResponse($client, 'Assets/GetAssetsWithMetadataAndLabels');
