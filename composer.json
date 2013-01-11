@@ -1,11 +1,13 @@
 {
     "name": "sheknows/ooyala-api-client",
     "type": "library",
+    "license": "MIT",
     "description": "Guzzle library for the Ooyala REST Api.",
     "keywords": ["guzzle", "ooyala"],
     "authors": [
         {
-            "name": "SheKnows Dev"
+            "name": "SheKnows Dev",
+            "homepage": "http://www.sheknows.com"
         },
         {
             "name": "Paul Redmond",
