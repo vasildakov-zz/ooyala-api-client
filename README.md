@@ -19,9 +19,11 @@ Install required dependencies:
 rake composer:install
 ```
 
+_Note: Running Rake composer tasks requires curl_
+
 # Testing
 
-The library testing suite contains mocked resposne objects and some core tests against the live Ooyala API.
+The library testing suite contains mocked response objects and some core tests against the live Ooyala API.
 
 Run offline tests tests:
 
