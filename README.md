@@ -3,7 +3,8 @@ ooyala-api-client
 
 A PHP library for Ooyala REST APIs
 
-# Development
+Development
+-----------
 The Ooyala client API uses composer to manage dependencies.
 Included are a couple convenince Rake tasks for getting/running composer:
 
@@ -21,8 +22,8 @@ rake composer:install
 
 _Note: Running Rake composer tasks requires curl_
 
-# Testing
-
+Testing
+-------
 The library testing suite contains mocked response objects and some core tests against the live Ooyala API.
 
 Run offline tests tests:
@@ -42,3 +43,8 @@ Run the entire test suite:
 ```shell
 rake test
 ```
+
+License
+-------
+Ooyala API Client is © 2013 SheKnows, LLC. It is free software, and may be
+redistributed under the terms specified in the LICENSE file.
