@@ -36,7 +36,7 @@ class OoyalaClient extends Client
         $description = ServiceDescription::factory(__DIR__ . "/client-{$apiVersion}.json");
         $client->setDescription($description);
 
-        $client->getEventDispatcher()->addListener('request.before_send', array(&$client, 'onRequestBeforeSend'), 0);
+        $client->getEventDispatcher()->addListener('command.before_send', array(&$client, 'onRequestBeforeSend'), 0);
 
         // OoyalaSignature plugin for singing requests.
         $client->addSubscriber(new OoyalaSignature($client->apiSecret));
@@ -51,12 +51,16 @@ class OoyalaClient extends Client
      */
     public function onRequestBeforeSend(Event $event)
     {
+        /** @var $command \Guzzle\Service\Command\OperationCommand */
+        $command = $event['command'];
         /** @var $request \Guzzle\Http\Message\Request */
-        $request = $event['request'];
+        $request = $command->getRequest();
 
-        $request->getQuery()
-            ->set('api_key', $this->apiKey)
-            ->set('expires', strtotime('+15 minutes'))
-        ;
+        $query = $request->getQuery();
+        $query->set('api_key', $this->apiKey);
+
+        if (!$command->hasKey('expires')) {
+            $query->set('expires', strtotime('+15 minutes'));
+        }
     }
 }

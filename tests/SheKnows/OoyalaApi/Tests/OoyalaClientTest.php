@@ -140,7 +140,7 @@ class OoyalaClientTest extends BaseTestCase
         $client = $this->getClient();
         $client->getConfig()->set('aki_key', 'your_argument_is_invalid');
         $command = $client->getCommand('GetAssets', array(
-            'limit' => 1
+            'limit' => 1,
         ));
 
         $beforeSend = function (\Guzzle\Common\Event $event) {
@@ -188,6 +188,7 @@ class OoyalaClientTest extends BaseTestCase
         $this->assertEquals(
             $expires,
             $request->getQuery()->get('expires'),
-            "The 'expires' param passed to Client::getCommand() should be used, not the OoyalaClient::onRequestBeforeSend() default.");
+            "The 'expires' param passed to Client::getCommand() should be used, not the OoyalaClient::onRequestBeforeSend() default."
+        );
     }
 }

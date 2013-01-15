@@ -3,9 +3,26 @@
     "apiVersion": "v2",
     "description": "Ooyala is an API that allows you to interact with the Ooyala REST services.",
     "operations": {
+        "AbstractCommand": {
+            "parameters": {
+                "expires": {
+                    "location": "query",
+                    "type": "integer"
+                },
+                "signature": {
+                    "location": "query",
+                    "type": "string"
+                },
+                "api_key": {
+                    "location": "query",
+                    "type": "string"
+                }
+            }
+        },
         "GetAssets": {
+            "extends": "AbstractCommand",
             "httpMethod": "GET",
-            "uri": "assets{?include}",
+            "uri": "assets",
             "description": "List Assets",
             "parameters": {
                 "where": {
