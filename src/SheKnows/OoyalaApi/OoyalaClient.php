@@ -36,7 +36,7 @@ class OoyalaClient extends Client
         $description = ServiceDescription::factory(__DIR__ . "/client-{$apiVersion}.json");
         $client->setDescription($description);
 
-        $client->getEventDispatcher()->addListener('command.before_send', array(&$client, 'onRequestBeforeSend'), 0);
+        $client->getEventDispatcher()->addListener('command.before_send', array(&$client, 'onCommandBeforeSend'), 0);
 
         // OoyalaSignature plugin for singing requests.
         $client->addSubscriber(new OoyalaSignature($client->apiSecret));
@@ -49,7 +49,7 @@ class OoyalaClient extends Client
      *
      * @param \Guzzle\Common\Event $event
      */
-    public function onRequestBeforeSend(Event $event)
+    public function onCommandBeforeSend(Event $event)
     {
         /** @var $command \Guzzle\Service\Command\OperationCommand */
         $command = $event['command'];
