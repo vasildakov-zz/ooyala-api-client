@@ -6,7 +6,7 @@ A PHP library for Ooyala REST APIs
 Development
 -----------
 The Ooyala client API uses composer to manage dependencies.
-Included are a couple convenince Rake tasks for getting/running composer:
+Included are a couple convenience Rake tasks for getting/running composer:
 
 Install composer dependencies + dev dependencies:
 
@@ -32,7 +32,7 @@ Run offline tests tests:
 rake test:offline
 ```
 
-Run live tests agains the Ooyala API:
+Run live tests against the Ooyala API:
 
 ```shell
 rake test:internet
