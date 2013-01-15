@@ -170,4 +170,24 @@ class OoyalaClientTest extends BaseTestCase
 
         $this->fail("Invalid 'api_key' parameter should raise '\Guzzle\Http\Exception\ClientErrorResponseException' exception.");
     }
+
+    public function testClientRespectsExistingExpiresParam()
+    {
+        $client = $this->getMockClient();
+        $this->setMockResponse($client, '/Assets/GetAssetsWithMetadataAndLabels');
+
+        $expires = time();
+
+        $command = $client->getCommand('GetAssets', array(
+            'expires' => $expires,
+        ));
+
+        $command->execute();
+        $request = $command->getRequest();
+
+        $this->assertEquals(
+            $expires,
+            $request->getQuery()->get('expires'),
+            "The 'expires' param passed to Client::getCommand() should be used, not the OoyalaClient::onRequestBeforeSend() default.");
+    }
 }
