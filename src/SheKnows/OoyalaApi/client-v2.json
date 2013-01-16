@@ -39,6 +39,17 @@
                     "type": "integer"
                 }
             }
+        },
+        "DeleteAssets": {
+            "httpMethod": "DELETE",
+            "uri": "assets/{assetId}",
+            "description": "Kills an Asset",
+            "parameters": {
+                "assetId": {
+                    "location": "uri",
+                    "type": "string"
+                }
+            }
         }
     }
 }
