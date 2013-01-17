@@ -170,6 +170,11 @@
                     "type": "string"
                 }
             }
+        },
+        "GetLabels": {
+            "httpMethod": "GET",
+            "uri": "labels",
+            "description": "Gets all Labels"
         }
     }
 }
