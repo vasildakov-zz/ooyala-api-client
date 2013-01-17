@@ -110,7 +110,7 @@
             }
         },
         "GetAsset": {
-            "extends": "AbstractCommand",
+            "extends": "GetAssets",
             "httpMethod": "GET",
             "uri": "assets/{assetId}",
             "description": "Gets an Asset",
