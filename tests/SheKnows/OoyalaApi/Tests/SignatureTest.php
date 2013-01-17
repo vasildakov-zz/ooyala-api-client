@@ -51,7 +51,7 @@ class SignatureTest extends BaseTestCase
         $this->assertEquals(43, strlen($signature), 'Hashed signature should be 43 characters in length.');
     }
 
-    public function testValidSignatureWithPostData()
+    public function testValidSignatureWithEntityBody()
     {
         $method = 'POST';
         $body = '{hello: "world!"}';
