@@ -1,7 +1,7 @@
 {
     "name": "Ooyala API",
     "apiVersion": "v2",
-    "description": "Ooyala is an API that allows you to interact with the Ooyala REST services.",
+    "description": "Ooyala has an API that allows you to interact with the Ooyala REST services.",
     "operations": {
         "AbstractCommand": {
             "parameters": {
@@ -16,6 +16,75 @@
                 "api_key": {
                     "location": "query",
                     "type": "string"
+                }
+            }
+        },
+        "InternalAssetData": {
+            "parameters": {
+                "name": {
+                    "location": "json",
+                    "type": "string"
+                },
+                "description": {
+                    "location": "json",
+                    "type": "string"
+                },
+                "asset_type": {
+                    "location": "json",
+                    "type": "string",
+                    "enum": ["video", "audio", "live_stream", "live_audio", "ad", "channel", "channel_set", "remote_asset", "youtube"]
+                },
+                "embed_code": {
+                    "location": "json",
+                    "type": "string"
+                },
+                "created_at": {
+                    "location": "json",
+                    "type": "string"
+                },
+                "updated_at": {
+                    "location": "json",
+                    "type": "string"
+                },
+                "original_file_name": {
+                    "location": "json",
+                    "type": "string"
+                },
+                "status": {
+                    "location": "json",
+                    "type": "string",
+                    "default": "live",
+                    "enum": ["uploading", "processing", "paused", "live"],
+                    "description": "Setting a video's status to "paused" will prevent it from being played in the player."
+                },
+                "duration": : {
+                    "location": "json",
+                    "type": "string",
+                    "description: "The video's duration, in milliseconds."
+                },
+                "preview_image_url": {
+                    "location": "json",
+                    "type": "string",
+                    "description: "The URL of the image shown for this video in the player's start screen."
+                },
+                "external_id": {
+                    "location": "json",
+                    "type": "string",
+                    "description": "An optional ID you assign to this asset. See the "Use external IDs" section for details."
+                },
+                "closed_captions_url": {
+                    "location": "json",
+                    "type": "string",
+                    "description": "The URL for the closed captions file for this asset."
+                },
+                "publishing_rule_id": {
+                    "location": "json",
+                    "type": "string"
+                },
+                "time_restrictions": {
+                    "location": "json",
+                    "type": ["null", "string","array"],
+                    "description": "Flights times for a video. Time restrictions can be null to inherit from the publishing rule, a specific time range or a recurring time slot."
                 }
             }
         },
@@ -40,12 +109,63 @@
                 }
             }
         },
-        "DeleteAssets": {
-            "httpMethod": "DELETE",
+        "GetAsset": {
+            "extends": "AbstractCommand",
+            "httpMethod": "GET",
             "uri": "assets/{assetId}",
-            "description": "Kills an Asset",
+            "description": "Gets an Asset",
             "parameters": {
                 "assetId": {
+                    "required": true,
+                    "location": "uri",
+                    "type": "string"
+                }
+            }
+        },
+        "CreateAsset": {
+            "extends": "InternalAssetData",
+            "httpMethod": "POST",
+            "uri": "assets",
+            "description": "Creates an Asset",
+            "parameters": {
+                "name": {
+                    "required": true
+                },
+                "asset_type": {
+                    "required": true
+                },
+                "file_name": {
+                    "required": true,
+                    "location": "json",
+                    "type": "string"
+                },
+                "file_size": {
+                    "required": true,
+                    "location": "json",
+                    "type": integer
+                }
+            }
+        },
+        "UpdateAsset": {
+            "extends": "InternalAssetData",
+            "httpMethod": "PATCH",
+            "uri": "assets/{assetId}",
+            "description": "Updates an Asset",
+            "parameters": {
+                "assetId": {
+                    "required": true,
+                    "location": "uri",
+                    "type": "string"
+                }
+            }
+        },
+        "DeleteAsset": {
+            "httpMethod": "DELETE",
+            "uri": "assets/{assetId}",
+            "description": "Deletes an Asset",
+            "parameters": {
+                "assetId": {
+                    "required": true,
                     "location": "uri",
                     "type": "string"
                 }
