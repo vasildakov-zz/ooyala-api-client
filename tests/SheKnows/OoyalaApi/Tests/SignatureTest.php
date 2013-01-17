@@ -2,6 +2,7 @@
 
 namespace SheKnows\OoyalaApi\Tests;
 
+use Guzzle\Http\Message\EntityEnclosingRequest;
 use SheKnows\OoyalaApi\Signature;
 use Guzzle\Http\Message\Request;
 
@@ -48,6 +49,34 @@ class SignatureTest extends BaseTestCase
         );
 
         $this->assertEquals(43, strlen($signature), 'Hashed signature should be 43 characters in length.');
+    }
+
+    public function testValidSignatureWithPostData()
+    {
+        $method = 'POST';
+        $body = '{hello: "world!"}';
+        $path = '/say/hello';
+        $secret = '456';
+        $queryParams = array(
+            'fiz' => 'buzz',
+            'foo' => 'bar',
+        );
+
+        $request = new EntityEnclosingRequest($method, $path);
+        $request->setBody($body);
+
+        $signature = new Signature($secret, $request);
+
+        $expected = $secret . $method . $path;
+        ksort($queryParams);
+        foreach ($queryParams as $key => $param) {
+            $expected .= "{$key}={$param}";
+            $request->getQuery()->set($key, $param);
+        }
+        $expected .= $body;
+
+        $this->assertEquals($expected, $signature->getRawSignature());
+        $this->assertEquals(43, strlen($signature));
     }
 
     /**

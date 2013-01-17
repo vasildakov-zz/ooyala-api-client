@@ -2,6 +2,7 @@
 
 namespace SheKnows\OoyalaApi;
 
+use Guzzle\Http\Message\EntityEnclosingRequestInterface;
 use \Guzzle\Http\Message\Request;
 
 /**
@@ -41,7 +42,7 @@ final class Signature
         }
 
         // Get the entity body (POST, PUT, PATCH, DELETE)
-        if ($request->getMethod() !== Request::GET) {
+        if ($request->getMethod() !== Request::GET && $request instanceof EntityEnclosingRequestInterface) {
             $to_sign .= $request->getBody();
         }
 
