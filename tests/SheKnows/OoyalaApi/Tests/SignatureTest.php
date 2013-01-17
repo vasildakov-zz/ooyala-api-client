@@ -49,4 +49,36 @@ class SignatureTest extends BaseTestCase
 
         $this->assertEquals(43, strlen($signature), 'Hashed signature should be 43 characters in length.');
     }
+
+    /**
+     * Make sure the request signature query param is url-encoded.
+     */
+    public function testUrlEncodedSignature()
+    {
+        $client = $this->getMockClient();
+        $this->setMockResponse($client, 'Assets/GetAssetsWithMetadataAndLabels');
+
+        $command = $client->getCommand('GetAssets', array(
+            'limit' => 1,
+            'where' => 'something spaced',
+        ));
+
+        $command->execute();
+
+        $request = $command->getRequest();
+
+        // Get the encoded signature before wiping it to prepare the expected signature.
+        $encodedData = $request->getQuery()->urlEncode();
+
+        // Remove signature to resign request as the expected signature object.
+        $request->getQuery()->remove('signature');
+        $signature = new Signature('456', $request);
+
+        $this->assertArrayHasKey('signature', $encodedData);
+        $this->assertEquals(
+            rawurlencode((string) $signature),
+            $encodedData['signature'],
+            'Request should be encoding the signature before sending (required by Ooyala).'
+        );
+    }
 }
