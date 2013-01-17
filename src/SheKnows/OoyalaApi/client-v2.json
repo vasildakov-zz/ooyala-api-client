@@ -175,6 +175,22 @@
             "httpMethod": "GET",
             "uri": "labels",
             "description": "Gets all Labels"
+        },
+        "CreateAssetLabels": {
+            "httpMethod": "POST",
+            "uri": "assets/{assetId}/labels",
+            "parameters": {
+                "assetId": {
+                    "required": true,
+                    "location": "uri",
+                    "type": "string"
+                },
+                "labels": {
+                    "required": true,
+                    "location": "body",
+                    "type": "string"
+                }
+            }
         }
     }
 }
