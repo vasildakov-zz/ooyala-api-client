@@ -51,6 +51,9 @@ class SignatureTest extends BaseTestCase
         $this->assertEquals(43, strlen($signature), 'Hashed signature should be 43 characters in length.');
     }
 
+    /**
+     * Test valid signature for entity-body style requests (POST, PUT, PATCH, DELETE).
+     */
     public function testValidSignatureWithEntityBody()
     {
         $method = 'POST';
@@ -75,8 +78,8 @@ class SignatureTest extends BaseTestCase
         }
         $expected .= $body;
 
-        $this->assertEquals($expected, $signature->getRawSignature());
-        $this->assertEquals(43, strlen($signature));
+        $this->assertEquals($expected, $signature->getRawSignature(), 'Raw signature should include entity-body string.');
+        $this->assertEquals(43, strlen($signature), 'Hash signature should be 43 characters in length.');
     }
 
     /**
