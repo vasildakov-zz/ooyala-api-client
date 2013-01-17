@@ -55,22 +55,22 @@
                     "type": "string",
                     "default": "live",
                     "enum": ["uploading", "processing", "paused", "live"],
-                    "description": "Setting a video's status to "paused" will prevent it from being played in the player."
+                    "description": "Setting a video's status to 'paused' will prevent it from being played in the player."
                 },
-                "duration": : {
+                "duration": {
                     "location": "json",
                     "type": "string",
-                    "description: "The video's duration, in milliseconds."
+                    "description": "The video's duration, in milliseconds."
                 },
                 "preview_image_url": {
                     "location": "json",
                     "type": "string",
-                    "description: "The URL of the image shown for this video in the player's start screen."
+                    "description": "The URL of the image shown for this video in the player's start screen."
                 },
                 "external_id": {
                     "location": "json",
                     "type": "string",
-                    "description": "An optional ID you assign to this asset. See the "Use external IDs" section for details."
+                    "description": "An optional ID you assign to this asset. See the 'Use external IDs' section for details."
                 },
                 "closed_captions_url": {
                     "location": "json",
@@ -142,7 +142,7 @@
                 "file_size": {
                     "required": true,
                     "location": "json",
-                    "type": integer
+                    "type": "integer"
                 }
             }
         },
