@@ -60,7 +60,6 @@ class SignatureTest extends BaseTestCase
 
         $command = $client->getCommand('GetAssets', array(
             'limit' => 1,
-            'where' => 'something spaced',
         ));
 
         $command->execute();
