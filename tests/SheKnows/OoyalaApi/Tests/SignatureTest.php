@@ -55,13 +55,15 @@ class SignatureTest extends BaseTestCase
      */
     public function testUrlEncodedSignature()
     {
-        $signature = '1234 ] 5678';
-        $request = new Request('GET', "/fake?signature={$signature}");
+        $expected = '1234 ] 5678';
+        $request = new Request('GET', "/fake?signature={$expected}");
 
-        $encodedData = $request->getQuery()->urlEncode();
+        $url = explode('signature=', $request->getUrl());
+        $signature = end($url);
+
         $this->assertEquals(
-            rawurlencode($signature),
-            $encodedData['signature'],
+            rawurlencode($expected),
+            $signature,
             'Request should be encoding the signature before sending (required by Ooyala).'
         );
     }
