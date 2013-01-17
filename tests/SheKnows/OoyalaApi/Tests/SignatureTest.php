@@ -51,31 +51,16 @@ class SignatureTest extends BaseTestCase
     }
 
     /**
-     * Make sure the request signature query param is url-encoded.
+     * Guzzle should take care of encoding signatures. This test is just a safety net to ensure that happens.
      */
     public function testUrlEncodedSignature()
     {
-        $client = $this->getMockClient();
-        $this->setMockResponse($client, 'Assets/GetAssetsWithMetadataAndLabels');
+        $signature = '1234 ] 5678';
+        $request = new Request('GET', "/fake?signature={$signature}");
 
-        $command = $client->getCommand('GetAssets', array(
-            'limit' => 1,
-        ));
-
-        $command->execute();
-
-        $request = $command->getRequest();
-
-        // Get the encoded signature before wiping it to prepare the expected signature.
         $encodedData = $request->getQuery()->urlEncode();
-
-        // Remove signature to resign request as the expected signature object.
-        $request->getQuery()->remove('signature');
-        $signature = new Signature('456', $request);
-
-        $this->assertArrayHasKey('signature', $encodedData);
         $this->assertEquals(
-            rawurlencode((string) $signature),
+            rawurlencode($signature),
             $encodedData['signature'],
             'Request should be encoding the signature before sending (required by Ooyala).'
         );
