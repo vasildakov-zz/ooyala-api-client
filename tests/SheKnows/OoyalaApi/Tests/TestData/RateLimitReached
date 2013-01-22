@@ -6,7 +6,7 @@ Connection: keep-alive
 Status: 429 Too Many Requests
 Ooyala-Server-Id: i-f0e3a188
 Ooyala-Request-Id: c9eb76577e738af522d6b17cccad6862
-Content-Length: 72
+Content-Length: 84
 Accept-Ranges: bytes
 X-Varnish: 2175576730
 Age: 0
