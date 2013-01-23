@@ -5,7 +5,7 @@ namespace SheKnows\OoyalaApi\Tests\Command;
 use SheKnows\OoyalaApi\Tests\BaseTestCase;
 
 /**
- * Tests for the Asset commands
+ * Tests for the Player API commands
  */
 class PlayersTest extends BaseTestCase
 {
