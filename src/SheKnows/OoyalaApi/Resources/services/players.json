@@ -1,0 +1,29 @@
+{
+    "operations": {
+        "AbstractPlayer": {
+            "uri": "players/{playerId}",
+            "parameters": {
+                "playerId": {
+                    "required": true,
+                    "location": "uri",
+                    "type": "string"
+                }
+            }
+        },
+        "GetPlayers": {
+            "uri": "players",
+            "httpMethod": "GET",
+            "description": "Get a list of available players"
+        },
+        "GetPlayer": {
+            "extends": "AbstractPlayer",
+            "httpMethod": "GET",
+            "description": "Get one player"
+        },
+        "DeletePlayer": {
+            "extends": "AbstractPlayer",
+            "httpMethod": "DELETE",
+            "description": "Delete one player"
+        }
+    }
+}

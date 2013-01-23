@@ -2,6 +2,9 @@
     "name": "Ooyala API",
     "apiVersion": "v2",
     "description": "Ooyala has an API that allows you to interact with the Ooyala REST services.",
+    "includes": [
+        "Resources/services/players.json"
+    ],
     "operations": {
         "AbstractCommand": {
             "parameters": {
