@@ -45,12 +45,10 @@ namespace :test do
   end
   desc "Run Mocked responses and tests that do not require internet access"
   task :offline do
-    Rake::Task["composer:dev"].invoke
     sh "#{phpunit} --exclude-group internet ./tests"
   end
   desc "Run mission-critical tests against the live ooyala API."
   task :internet do
-    Rake::Task["composer:dev"].invoke
     sh "#{phpunit} --group internet ./tests"
   end
 end
