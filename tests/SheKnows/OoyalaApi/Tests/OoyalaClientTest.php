@@ -43,6 +43,9 @@ class OoyalaClientTest extends BaseTestCase
         $this->assertInstanceOf('SheKnows\OoyalaApi\OoyalaClient', $client);
     }
 
+    /**
+     * @group internet
+     */
     public function testValidSignatureResponse()
     {
         $client = $this->getClient();
