@@ -228,7 +228,7 @@
                 }
             }
         },
-        "AddAssetLabels": {
+        "AddAssetLabel": {
             "httpMethod": "PUT",
             "uri": "assets/{assetId}/labels/{labelId}",
             "parameters": {
