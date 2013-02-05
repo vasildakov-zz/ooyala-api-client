@@ -205,9 +205,10 @@
                     "location": "uri",
                     "type": "string"
                 },
-                "where": {
+                "include": {
                     "location": "query",
-                    "type": "string"
+                    "type": "string",
+                    "pattern": "/^(metadata,labels|labels,metadata|metadata|labels)$/"
                 }
             }
         },
