@@ -183,6 +183,34 @@
             "uri": "labels",
             "description": "Gets all Labels"
         },
+        "GetLabelsChildren": {
+            "httpMethod": "GET",
+            "uri": "labels/{labelId}/children",
+            "description": "Gets all children of a Label",
+            "parameters": {
+                "labelId": {
+                    "required": true,
+                    "location": "uri",
+                    "type": "string"
+                }
+            }
+        },
+        "GetLabelsAssets": {
+            "httpMethod": "GET",
+            "uri": "labels/{labelId}/assets",
+            "description": "Gets all Assets From a Label",
+            "parameters": {
+                "labelId": {
+                    "required": true,
+                    "location": "uri",
+                    "type": "string"
+                },
+                "where": {
+                    "location": "query",
+                    "type": "string"
+                }
+            }
+        },
         "CreateAssetLabels": {
             "httpMethod": "POST",
             "uri": "assets/{assetId}/labels",
