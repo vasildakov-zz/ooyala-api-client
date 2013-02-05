@@ -227,6 +227,22 @@
                     "type": "string"
                 }
             }
+        },
+        "AddAssetLabels": {
+            "httpMethod": "PUT",
+            "uri": "assets/{assetId}/labels/{labelId}",
+            "parameters": {
+                "assetId": {
+                    "required": true,
+                    "location": "uri",
+                    "type": "string"
+                },
+                "labelId": {
+                    "required": true,
+                    "location": "uri",
+                    "type": "string"
+                }
+            }
         }
     }
 }
