@@ -243,6 +243,32 @@
                     "type": "string"
                 }
             }
+        },
+        "GetNextPage": {
+            "httpMethod": "GET",
+            "uri": "{path}{?include,limit,page_token}",
+            "parameters": {
+                "path": {
+                    "required": true,
+                    "location": "uri",
+                    "type": "string"
+                },
+                "include": {
+                    "required": true,
+                    "location": "query",
+                    "type": "string"
+                },
+                "limit": {
+                    "location": "query",
+                    "type": "string",
+                    "default": "100"
+                },
+                "page_token": {
+                    "required": true,
+                    "location": "query",
+                    "type": "string"
+                }
+            }
         }
     }
 }
