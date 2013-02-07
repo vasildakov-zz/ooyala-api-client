@@ -244,6 +244,9 @@
                 }
             }
         },
+        "UpdateAssetMetadata": {
+            "class": "SheKnows\\OoyalaApi\\Command\\UpdateAssetMetadata"
+        },
         "GetNextPage": {
             "httpMethod": "GET",
             "uri": "{path}{?include,limit,page_token}",
