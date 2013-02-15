@@ -195,6 +195,17 @@
                 }
             }
         },
+        "GetLabelsByPath": {
+            "httpMethod": "GET",
+            "uri": "labels/by_full_path/{paths}",
+            "parameters": {
+                "paths": {
+                    "required": true,
+                    "location": "uri",
+                    "type": "string"
+                }
+            }
+        },
         "GetLabelsAssets": {
             "httpMethod": "GET",
             "uri": "labels/{labelId}/assets",
