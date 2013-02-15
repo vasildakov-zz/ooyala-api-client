@@ -35,15 +35,14 @@ class GetLabelsAssets extends AbstractCommand
      */
     protected function process()
     {
+        return parent::process();
+
         // Execute as normally if includeChildren is false
         if (!$this->get('includeChildren') || null === $this->get('includeChildren')) {
             return parent::process();
         }
 
         // Loop through all of a label's children and retrieve any child assets
-        var_dump($this->getResult());
-        exit;
-
         $this->result;
     }
 
