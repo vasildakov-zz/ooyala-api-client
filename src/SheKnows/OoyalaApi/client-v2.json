@@ -210,6 +210,7 @@
             "httpMethod": "GET",
             "uri": "labels/{labelId}/assets",
             "description": "Gets all Assets From a Label",
+            "class": "SheKnows\\OoyalaApi\\Command\\GetLabelsAssets",
             "parameters": {
                 "labelId": {
                     "required": true,
@@ -220,6 +221,11 @@
                     "location": "query",
                     "type": "string",
                     "pattern": "/^(metadata,labels|labels,metadata|metadata|labels)$/"
+                },
+                "includeChildren": {
+                    "required": false,
+                    "description": "If set to true, this will make multiple API calls to retrieve any child label's assets as well.",
+                    "type": "boolean"
                 }
             }
         },
