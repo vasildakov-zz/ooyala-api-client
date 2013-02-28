@@ -44,6 +44,21 @@ Run the entire test suite:
 rake test
 ```
 
+Documentation
+-------------
+API documentation is available at [http://sheknows.github.com/ooyala-api-client/](http://sheknows.github.com/ooyala-api-client/). To build the documentation:
+
+Make sure you have initialized submodules:
+```
+git submodule init
+git submodule update
+```
+
+Run the API generator:
+```shell
+rake build:api
+```
+
 License
 -------
 Ooyala API Client is © 2013 SheKnows, LLC. It is free software, and may be
