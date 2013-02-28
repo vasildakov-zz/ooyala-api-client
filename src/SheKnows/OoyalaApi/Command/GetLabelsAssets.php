@@ -10,6 +10,8 @@ use Guzzle\Service\Command\AbstractCommand;
  * @guzzle labelId type="string" doc="Base label to retrieve assets for" required="true"
  * @guzzle include type="string" doc="Retrieve metadata/labels as well" required="false"
  * @guzzle includeChildren type="boolean" doc="Retrieve label's children as well" required="false"
+ *
+ * @api
  */
 class GetLabelsAssets extends AbstractCommand
 {
@@ -72,7 +74,7 @@ class GetLabelsAssets extends AbstractCommand
     }
 
     /**
-     * Self referenced function to make it easy to retrieve children as needed
+     * Self referenced function to make it easy to retrieve children as needed.
      */
     private function getAssetsByLabelId($labelId)
     {

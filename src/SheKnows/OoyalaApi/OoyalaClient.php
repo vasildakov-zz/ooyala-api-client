@@ -9,13 +9,33 @@ use Guzzle\Common\Event;
 use Guzzle\Service\Description\ServiceDescription;
 use Guzzle\Common\Collection;
 
+/**
+ * Ooyala Http client.
+ *
+ * @api
+ */
 class OoyalaClient extends Client
 {
 
+    /**
+     * Ooyala API key.
+     *
+     * @var string
+     */
     private $apiKey;
 
+    /**
+     * Ooyala API Secret.
+     *
+     * @var string
+     */
     private $apiSecret;
 
+    /**
+     * @param array $config Collection settings. The `api_key` and `api_secret` config values are required.
+     *
+     * @return \Guzzle\Service\Client|OoyalaClient Instance of the Ooyala client.
+     */
     public static function factory($config = array())
     {
         $defaults = array(
@@ -45,9 +65,9 @@ class OoyalaClient extends Client
     }
 
     /**
-     * Set required 'api_key' and 'expires' params.
+     * Event listener to set required 'api_key' and 'expires' params before sending the request.
      *
-     * @param \Guzzle\Common\Event $event
+     * @param \Guzzle\Common\Event $event A `command.before_send` event.
      */
     public function onCommandBeforeSend(Event $event)
     {

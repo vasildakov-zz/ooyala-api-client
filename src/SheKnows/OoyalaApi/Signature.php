@@ -24,12 +24,23 @@ final class Signature
      */
     private $apiSecret;
 
+    /**
+     * Constructor.
+     *
+     * @param $apiSecret Ooyala client Api Secret.
+     * @param \Guzzle\Http\Message\Request $request \Guzzle\Http\Message\Request object
+     */
     public function __construct($apiSecret, Request $request)
     {
         $this->apiSecret = $apiSecret;
         $this->request = $request;
     }
 
+    /**
+     * Builds the raw Ooyala signature from the $request object.
+     *
+     * @return string Returns the raw signature without hashing applied.
+     */
     public function getRawSignature()
     {
         $request = $this->request;
@@ -49,6 +60,11 @@ final class Signature
         return $to_sign;
     }
 
+    /**
+     * Get the hashed version of the raw signature to use in a request to the Ooyala backlot api.
+     *
+     * @return string Hashed version of the request signature.
+     */
     public function getHashedSignature()
     {
         $hash = hash("sha256", $this->getRawSignature(), true);
@@ -58,6 +74,11 @@ final class Signature
         return $base;
     }
 
+    /**
+     * Hashed request signature when this object is treated like a string.
+     *
+     * @return string Hashed version of the request signature.
+     */
     public function __toString()
     {
         return $this->getHashedSignature();
@@ -67,9 +88,9 @@ final class Signature
      * Convenience function to sort request parameter keys in order.
      * The order of request parameters is important to generating a valid request signature.
      *
-     * @param array $array
+     * @param array $array array of key/value pairs that need to be sorted to match Ooyala's hashing algorithm.
      *
-     * @return array
+     * @return array The array in sorted order.
      */
     private function sortKeys(array $array)
     {

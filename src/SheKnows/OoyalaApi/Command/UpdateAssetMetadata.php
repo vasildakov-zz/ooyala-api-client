@@ -9,6 +9,8 @@ use Guzzle\Service\Command\AbstractCommand;
  *
  * @guzzle assetId type="string" doc="Asset to update" required="true"
  * @guzzle data type="array" doc="Metadata to add/replace" required="true"
+ *
+ * @api
  */
 class UpdateAssetMetadata extends AbstractCommand
 {
