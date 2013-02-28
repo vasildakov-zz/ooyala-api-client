@@ -1,0 +1,3 @@
+[submodule "api/build"]
+	path = api/build
+	url = git@github.com:sheknows/ooyala-api-client.git
