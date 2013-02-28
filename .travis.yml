@@ -9,14 +9,14 @@ before_script:
 - composer install
 script: phpunit ./tests
 env:
-  matrix:
-  - secure: ! 'nSMkbn3VgOV/Xgqhjg/bk85uBmzxJwqAKaktONv1nvgidnEGtA+Dq+UmPtHR
+  global:
+  - secure: ! 'P5zcKNhAtcp7JKc4cm7HZzgMmWIMAwURgwPL4BV8wNwzaY6DwwAUDhUYuBW0
 
-      JrKcby/Ml4rYLWwGPEM9BmrlLwGPrnmqloRrqOfzNB4w6zRGMHtzs1iyb8Rc
+      1TBXzz73V9dM2p1Yl5rpOsZ7o0sIbFXU2TE0LYMXAaIjl3oQYHmaAsry8DSk
 
-      xN0s6eSDHKlxn00xQYUrDHDVGkL5F5z40ZnzHOD1iobzdAjnszc='
-  - secure: ! 'MpEsdWTLO2v2z7hox5mHgopS6LtmW1kOSy6JqVy4CNeq3Ps/d2lnZEPAl9Gg
+      suyxF2IvlGMj1PKHRguC1Hx1b+irZyLAJwqqQ706YoVAu9erYO8='
+  - secure: ! 'ZeOejte5/bPxAhrGBjJl2Xbqher+BctwNAguqgBim9FbujfVLlB9CoFbAsNq
 
-      yYhcgJLbDTqXSfzwy5Tx2HHy857WLA7iKs26qQ1VsIEcMSofk4bYwnGSRum/
+      f3l5udqD0gHnMBvQybg/hZHrb3IZjf1q5pDYGBpdl9enm9mKkp3BlW/ryFXq
 
-      UPVP2LjZ5HzadwuIpfZzI7vd5SGgrMyGMYDx4Y5qBYzd187l9Vw='
+      Q9JaNluwo2e6qhP87HtQngXBCKctuBO1QXKNiGjXvePfEh96dOM='
