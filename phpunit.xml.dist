@@ -1,9 +1,10 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <phpunit bootstrap="./tests/bootstrap.php" colors="true">
     <php>
-        <!-- Just placeholders for now... -->
-        <server name="API_KEY" value="" />
-        <server name="API_SECRET" value="" />
+        <!-- Just placeholders -->
+        <!-- Set environment variables for CI Servers or add API_KEY/SECRET manually to phpunit.xml -->
+        <!--<server name="API_KEY" value="" />-->
+        <!--<server name="API_SECRET" value="" />-->
     </php>
     <testsuites>
         <testsuite name="guzzle-service">
