@@ -3,6 +3,8 @@ ooyala-api-client
 
 A PHP library for Ooyala REST APIs
 
+[![Build Status](https://api.travis-ci.org/sheknows/ooyala-api-client.png?branch=master)](https://travis-ci.org/sheknows/ooyala-api-client)
+
 Development
 -----------
 The Ooyala client API uses composer to manage dependencies.
