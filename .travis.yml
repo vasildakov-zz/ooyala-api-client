@@ -1,9 +1,22 @@
+---
 language: php
 php:
-  - 5.3
-  - 5.4
+- 5.3
+- 5.4
 git:
   submodules: false
 before_script:
-  - composer install
-script: phpunit --exclude-group internet ./tests
+- composer install
+script: phpunit ./tests
+env:
+  matrix:
+  - secure: ! 'nSMkbn3VgOV/Xgqhjg/bk85uBmzxJwqAKaktONv1nvgidnEGtA+Dq+UmPtHR
+
+      JrKcby/Ml4rYLWwGPEM9BmrlLwGPrnmqloRrqOfzNB4w6zRGMHtzs1iyb8Rc
+
+      xN0s6eSDHKlxn00xQYUrDHDVGkL5F5z40ZnzHOD1iobzdAjnszc='
+  - secure: ! 'MpEsdWTLO2v2z7hox5mHgopS6LtmW1kOSy6JqVy4CNeq3Ps/d2lnZEPAl9Gg
+
+      yYhcgJLbDTqXSfzwy5Tx2HHy857WLA7iKs26qQ1VsIEcMSofk4bYwnGSRum/
+
+      UPVP2LjZ5HzadwuIpfZzI7vd5SGgrMyGMYDx4Y5qBYzd187l9Vw='
