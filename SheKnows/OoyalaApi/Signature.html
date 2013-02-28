@@ -39,38 +39,38 @@
                     
                 </td>
                 <td class="last">
-                    <a href="#method___construct">__construct</a>($apiSecret, <abbr title="Guzzle\Http\Message\Request">Request</abbr> $request)
-                    <p></p>
+                    <a href="#method___construct">__construct</a>(<abbr title="SheKnows\OoyalaApi\$apiSecret">$apiSecret</abbr> $apiSecret, <abbr title="Guzzle\Http\Message\Request">Request</abbr> $request)
+                    <p>Constructor.</p>
                 </td>
                 <td></td>
             </tr>
                     <tr>
                 <td class="type">
-                    
+                    string
                 </td>
                 <td class="last">
                     <a href="#method_getRawSignature">getRawSignature</a>()
-                    <p></p>
+                    <p>Builds the raw Ooyala signature from the $request object.</p>
                 </td>
                 <td></td>
             </tr>
                     <tr>
                 <td class="type">
-                    
+                    string
                 </td>
                 <td class="last">
                     <a href="#method_getHashedSignature">getHashedSignature</a>()
-                    <p></p>
+                    <p>Get the hashed version of the raw signature to use in a request to the Ooyala backlot api.</p>
                 </td>
                 <td></td>
             </tr>
                     <tr>
                 <td class="type">
-                    
+                    string
                 </td>
                 <td class="last">
                     <a href="#method___toString">__toString</a>()
-                    <p></p>
+                    <p>Hashed request signature when this object is treated like a string.</p>
                 </td>
                 <td></td>
             </tr>
@@ -80,26 +80,26 @@
         <h2>Details</h2>
 
                         <h3 id="method___construct">
-        <div class="location">at line 27</div>
+        <div class="location">at line 33</div>
         <code>            public            
-    <strong>__construct</strong>($apiSecret, <abbr title="Guzzle\Http\Message\Request">Request</abbr> $request)</code>
+    <strong>__construct</strong>(<abbr title="SheKnows\OoyalaApi\$apiSecret">$apiSecret</abbr> $apiSecret, <abbr title="Guzzle\Http\Message\Request">Request</abbr> $request)</code>
     </h3>
     <div class="details">
-        <p></p>
+        <p>Constructor.</p>
         <p></p>
         <div class="tags">
                             <h4>Parameters</h4>
 
                     <table>
                     <tr>
-                <td></td>
+                <td><abbr title="SheKnows\OoyalaApi\$apiSecret">$apiSecret</abbr></td>
                 <td>$apiSecret</td>
-                <td></td>
+                <td>Ooyala client Api Secret.</td>
             </tr>
                     <tr>
                 <td><abbr title="Guzzle\Http\Message\Request">Request</abbr></td>
                 <td>$request</td>
-                <td></td>
+                <td>\Guzzle\Http\Message\Request object</td>
             </tr>
             </table>
 
@@ -110,45 +110,72 @@
     </div>
 
                 <h3 id="method_getRawSignature">
-        <div class="location">at line 33</div>
-        <code>            public            
+        <div class="location">at line 44</div>
+        <code>            public            string
     <strong>getRawSignature</strong>()</code>
     </h3>
     <div class="details">
-        <p></p>
+        <p>Builds the raw Ooyala signature from the $request object.</p>
         <p></p>
         <div class="tags">
             
+                            <h4>Return Value</h4>
+
+                    <table>
+        <tr>
+            <td>string</td>
+            <td>Returns the raw signature without hashing applied.</td>
+        </tr>
+    </table>
+
             
             
                     </div>
     </div>
 
                 <h3 id="method_getHashedSignature">
-        <div class="location">at line 52</div>
-        <code>            public            
+        <div class="location">at line 68</div>
+        <code>            public            string
     <strong>getHashedSignature</strong>()</code>
     </h3>
     <div class="details">
-        <p></p>
+        <p>Get the hashed version of the raw signature to use in a request to the Ooyala backlot api.</p>
         <p></p>
         <div class="tags">
             
+                            <h4>Return Value</h4>
+
+                    <table>
+        <tr>
+            <td>string</td>
+            <td>Hashed version of the request signature.</td>
+        </tr>
+    </table>
+
             
             
                     </div>
     </div>
 
                 <h3 id="method___toString">
-        <div class="location">at line 61</div>
-        <code>            public            
+        <div class="location">at line 82</div>
+        <code>            public            string
     <strong>__toString</strong>()</code>
     </h3>
     <div class="details">
-        <p></p>
+        <p>Hashed request signature when this object is treated like a string.</p>
         <p></p>
         <div class="tags">
             
+                            <h4>Return Value</h4>
+
+                    <table>
+        <tr>
+            <td>string</td>
+            <td>Hashed version of the request signature.</td>
+        </tr>
+    </table>
+
             
             
                     </div>
