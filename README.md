@@ -46,6 +46,17 @@ Run the entire test suite:
 rake test
 ```
 
+Travis CI
+---------
+Tests use Travis [secure environment variables](http://about.travis-ci.org/docs/user/build-configuration/#Secure-environment-variables). Forks testing this branch will need to generate environment variables to use Travis:
+
+```shell
+bundle install
+bundle exec travis encrypt MY_VAR=my-secret
+```
+
+_Note: encrypted ENV variables for this project will not work correctly on a fork. See the build configuration guide for more info._
+
 Documentation
 -------------
 API documentation is available at [http://sheknows.github.com/ooyala-api-client/](http://sheknows.github.com/ooyala-api-client/). To build the documentation:
