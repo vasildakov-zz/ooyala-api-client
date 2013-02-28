@@ -3,8 +3,5 @@ php:
   - 5.3
   - 5.4
 before_script:
-  - wget --quiet http://getcomposer.org/composer.phar
-  - php composer.phar install --install-suggests
-  - cp phpunit.xml.dist phpunit.xml
-  - ~/.nvm/nvm.sh run default vendor/guzzle/guzzle/tests/Guzzle/Tests/Http/server.js &
-script: phpunit
+  - composer install
+script: phpunit --exclude-group internet ./tests
