@@ -2,6 +2,8 @@ language: php
 php:
   - 5.3
   - 5.4
+git:
+  submodules: false
 before_script:
   - composer install
 script: phpunit --exclude-group internet ./tests
