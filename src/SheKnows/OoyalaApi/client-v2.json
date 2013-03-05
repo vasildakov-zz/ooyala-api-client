@@ -113,6 +113,10 @@
                 "limit": {
                     "location": "query",
                     "type": "integer"
+                },
+                "orderby": {
+                    "location": "query",
+                    "type": "string"
                 }
             }
         },
@@ -172,6 +176,18 @@
             "description": "Deletes an Asset",
             "parameters": {
                 "assetId": {
+                    "required": true,
+                    "location": "uri",
+                    "type": "string"
+                }
+            }
+        },
+        "GetLabel": {
+            "httpMethod": "GET",
+            "uri": "labels/{labelId}",
+            "description": "Get a Label",
+            "parameters": {
+                "labelId": {
                     "required": true,
                     "location": "uri",
                     "type": "string"
