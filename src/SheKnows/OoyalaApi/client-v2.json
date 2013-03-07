@@ -242,6 +242,10 @@
                     "required": false,
                     "description": "If set to true, this will make multiple API calls to retrieve any child label's assets as well.",
                     "type": "boolean"
+                },
+                "limit": {
+                    "type": "string",
+                    "location": "query"
                 }
             }
         },
