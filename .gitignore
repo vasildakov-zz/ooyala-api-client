@@ -2,3 +2,4 @@ phpunit.xml
 vendor/*
 api/cache
 composer.phar
+composer.lock
