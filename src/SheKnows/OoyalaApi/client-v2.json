@@ -284,6 +284,21 @@
         "UpdateAssetMetadata": {
             "class": "SheKnows\\OoyalaApi\\Command\\UpdateAssetMetadata"
         },
+        "GetRelatedAssets": {
+            "httpMethod": "GET",
+            "uri": "discover/similar/assets/{assetId}",
+            "parameters": {
+                "assetId": {
+                    "required": true,
+                    "location": "uri",
+                    "type": "string"
+                },
+                "limit": {
+                    "location": "query",
+                    "type": "string"
+                }
+            }
+        },
         "GetNextPage": {
             "httpMethod": "GET",
             "uri": "{path}{?include,limit,page_token}",
