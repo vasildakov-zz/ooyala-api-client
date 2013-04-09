@@ -290,7 +290,7 @@
         },
         "GetAssetsPreviewImage": {
             "httpMethod": "GET",
-            "uri": "assets/{assetId}/preview_image_urls",
+            "uri": "assets/{assetId}/primary_preview_image",
             "parameters": {
                 "assetId": {
                     "required": true,
