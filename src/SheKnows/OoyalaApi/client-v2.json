@@ -246,6 +246,10 @@
                 "limit": {
                     "type": "string",
                     "location": "query"
+                },
+                "where": {
+                    "type": "string",
+                    "location": "query"
                 }
             }
         },
