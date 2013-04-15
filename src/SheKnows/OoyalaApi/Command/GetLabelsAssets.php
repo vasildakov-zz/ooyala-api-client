@@ -10,6 +10,8 @@ use Guzzle\Service\Command\AbstractCommand;
  * @guzzle labelId type="string" doc="Base label to retrieve assets for" required="true"
  * @guzzle include type="string" doc="Retrieve metadata/labels as well" required="false"
  * @guzzle includeChildren type="boolean" doc="Retrieve label's children as well" required="false"
+ * @guzzle limit type="string" doc="The number of results to limit to" required="false"
+ * @guzzle where type="string" doc="Only retrieve assets that match this query" required="false"
  *
  * @api
  */
@@ -65,8 +67,16 @@ class GetLabelsAssets extends AbstractCommand
             // Loop through all of a label's children and retrieve any child assets
             foreach($labelsChildren['items'] as $childKey => $childLabel) {
                 $childAssets = $this->getAssetsByLabelId($childLabel['id']);
-                $results[$childLabel['id']]['next_page'] = $childAssets['next_page'];
-                $results[$childLabel['id']]['items']     = $childAssets['items'];
+
+                // Make pagination available for some of the child label's
+                if (null !== $childAssets['next_page']) {
+                    $results['next_page'][$childLabel['id']] = $childAssets['next_page'];
+                }
+
+                // Append child's assets to original result array
+                foreach ($childAssets['items'] as $childAsset) {
+                    $results['items'][] = $childAsset;
+                }
             }
         }
 
@@ -79,9 +89,11 @@ class GetLabelsAssets extends AbstractCommand
     private function getAssetsByLabelId($labelId)
     {
         return $this->getClient()->getCommand('GetLabelsAssets', array(
-            'labelId' => $labelId,
-            'include' => $this->get('include'),
-            'includeChildren' => $this->get('includeChildren')
+            'labelId'         => $labelId,
+            'include'         => $this->get('include'),
+            'includeChildren' => $this->get('includeChildren'),
+            'limit'           => $this->get('limit'),
+            'where'           => $this->get('where')
         ))->execute();
     }
 }
