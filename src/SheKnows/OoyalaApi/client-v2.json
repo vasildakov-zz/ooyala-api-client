@@ -288,6 +288,17 @@
         "UpdateAssetMetadata": {
             "class": "SheKnows\\OoyalaApi\\Command\\UpdateAssetMetadata"
         },
+        "GetAssetsGeneratedPreviewImages": {
+            "httpMethod": "GET",
+            "uri": "assets/{assetId}/generated_preview_images",
+            "parameters": {
+                "assetId": {
+                    "required": true,
+                    "location": "uri",
+                    "type": "string"
+                }
+            }
+        },
         "GetAssetsPreviewImage": {
             "httpMethod": "GET",
             "uri": "assets/{assetId}/primary_preview_image",
@@ -295,6 +306,27 @@
                 "assetId": {
                     "required": true,
                     "location": "uri",
+                    "type": "string"
+                }
+            }
+        },
+        "UpdateAssetPreviewImage": {
+            "httpMethod": "PUT",
+            "uri": "assets/{assetId}/primary_preview_image",
+            "parameters": {
+                "assetId": {
+                    "required": true,
+                    "location": "uri",
+                    "type": "string"
+                },
+                "type": {
+                    "required": true,
+                    "location": "json",
+                    "type": "string",
+                    "enum": ["generated", "uploaded_file", "remote_url"]
+                },
+                "time": {
+                    "location": "json",
                     "type": "string"
                 }
             }
