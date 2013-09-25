@@ -46,4 +46,9 @@ abstract class BaseTestCase extends GuzzleTestCase
         return $this->getServiceBuilder()->get('cdn.ooyala-client');
     }
 
+
+    protected function getCacheEnabledClient()
+    {
+        return $this->getServiceBuilder()->get('cache.ooyala-client');
+    }
 }

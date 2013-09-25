@@ -22,6 +22,15 @@ Guzzle\Tests\GuzzleTestCase::setServiceBuilder(
                 'base_url' => 'https://cdn-api.ooyala.com/{api_version}',
             ),
         ),
+        'cache.ooyala-client' => array(
+            'class' => 'SheKnows\\OoyalaApi\\OoyalaClient',
+            'params' => array(
+                'api_key' => $_SERVER['API_KEY'],
+                'api_secret' => $_SERVER['API_SECRET'],
+                'base_url' => 'https://cdn-api.ooyala.com/{api_version}',
+                'ooyala_cache' => true,
+            ),
+        ),
         'mock.ooyala-client' => array(
             'class' => 'SheKnows\\OoyalaApi\\OoyalaClient',
             'params' => array(

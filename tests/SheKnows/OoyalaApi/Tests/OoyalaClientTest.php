@@ -217,8 +217,7 @@ class OoyalaClientTest extends BaseTestCase
      */
     public function testCachedResponse()
     {
-        $client = $this->getCDNClient();
-
+        $client = $this->getCacheEnabledClient();
 
         $doRequest = function () use ($client) {
             static $unique;
