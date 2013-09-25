@@ -12,6 +12,10 @@ Guzzle\Tests\GuzzleTestCase::setServiceBuilder(
             'params' => array(
                 'api_key' => $_SERVER['API_KEY'],
                 'api_secret' => $_SERVER['API_SECRET'],
+                'request.options' => array(
+                    'timeout' => 0,
+                    'connect_timeout' => 0,
+                ),
             ),
         ),
         'cdn.ooyala-client' => array(
@@ -20,6 +24,10 @@ Guzzle\Tests\GuzzleTestCase::setServiceBuilder(
                 'api_key' => $_SERVER['API_KEY'],
                 'api_secret' => $_SERVER['API_SECRET'],
                 'base_url' => 'https://cdn-api.ooyala.com/{api_version}',
+                'request.options' => array(
+                    'timeout' => 0,
+                    'connect_timeout' => 0,
+                ),
             ),
         ),
         'cache.ooyala-client' => array(
@@ -29,6 +37,10 @@ Guzzle\Tests\GuzzleTestCase::setServiceBuilder(
                 'api_secret' => $_SERVER['API_SECRET'],
                 'base_url' => 'https://cdn-api.ooyala.com/{api_version}',
                 'ooyala.cache' => true,
+                'request.options' => array(
+                    'timeout' => 0,
+                    'connect_timeout' => 0,
+                ),
             ),
         ),
         'mock.ooyala-client' => array(
@@ -36,7 +48,11 @@ Guzzle\Tests\GuzzleTestCase::setServiceBuilder(
             'params' => array(
                 'api_key'    => '123',
                 'api_secret' => '456',
-                'base_url'   => 'http://test.local'
+                'base_url'   => 'http://test.local',
+                'request.options' => array(
+                    'timeout' => 0,
+                    'connect_timeout' => 0,
+                ),
             )
         ),
     ))

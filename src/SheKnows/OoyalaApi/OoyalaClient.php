@@ -66,39 +66,15 @@ class OoyalaClient extends Client
         // Service description
         $apiVersion = $config->get('api_version');
         $description = ServiceDescription::factory(__DIR__ . "/client-{$apiVersion}.json");
-        $client->setDescription($description);
 
-        $client->getEventDispatcher()->addListener('command.before_send', array(&$client, 'onCommandBeforeSend'), 0);
-
-        // OoyalaSignature plugin for singing requests.
-        $client->addSubscriber(new OoyalaSignature($client->apiSecret));
-        $client->addSubscriber(new OoyalaCachePlugin());
-
-        $client->dispatch(OoyalaClient::EVENT_INITIALIZED, array(
-            'client' => $client,
-        ));
+        $client
+            ->setDescription($description)
+            ->addSubscriber(new OoyalaSignature($client->apiSecret))
+            ->addSubscriber(new OoyalaCachePlugin())
+            ->dispatch(OoyalaClient::EVENT_INITIALIZED, array('client' => $client))
+        ;
 
         return $client;
-    }
-
-    /**
-     * Event listener to set required 'api_key' and 'expires' params before sending the request.
-     *
-     * @param \Guzzle\Common\Event $event A `command.before_send` event.
-     */
-    public function onCommandBeforeSend(Event $event)
-    {
-        /** @var $command \Guzzle\Service\Command\OperationCommand */
-        $command = $event['command'];
-        /** @var $request \Guzzle\Http\Message\Request */
-        $request = $command->getRequest();
-
-        $query = $request->getQuery();
-        $query->set('api_key', $this->apiKey);
-
-        if (!$command->hasKey('expires')) {
-            $query->set('expires', strtotime('+15 minutes'));
-        }
     }
 
     private static function processConfig(array $config = array())
@@ -107,8 +83,8 @@ class OoyalaClient extends Client
             'base_url' => 'https://api.ooyala.com/{api_version}',
             'api_version' => 'v2',
             'request.options' => array(
-                'timeout' => 3,
-                'connect_timeout' => 1.5,
+                'timeout' => 4,
+                'connect_timeout' => 2,
             ),
         );
 
