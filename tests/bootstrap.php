@@ -28,7 +28,7 @@ Guzzle\Tests\GuzzleTestCase::setServiceBuilder(
                 'api_key' => $_SERVER['API_KEY'],
                 'api_secret' => $_SERVER['API_SECRET'],
                 'base_url' => 'https://cdn-api.ooyala.com/{api_version}',
-                'ooyala_cache' => true,
+                'ooyala.cache' => true,
             ),
         ),
         'mock.ooyala-client' => array(

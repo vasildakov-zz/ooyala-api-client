@@ -99,10 +99,6 @@ class OoyalaClient extends Client
         if (!$command->hasKey('expires')) {
             $query->set('expires', strtotime('+15 minutes'));
         }
-
-        $request->setHeader('Cache-Control', 'max-age=900, stale-if-error=1800');
-        $request->getParams()->set('cache.key_filter', 'expires,signature');
-        $request->getParams()->set('cache.revalidate', 'never');
     }
 
     private static function processConfig(array $config = array())
