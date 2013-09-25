@@ -17,7 +17,8 @@
     ],
     "require": {
         "php": ">=5.3.2",
-        "guzzle/guzzle": "3.0.*"
+        "guzzle/guzzle": "3.7.*",
+        "doctrine/cache": "*"
     },
     "require-dev": {
         "sami/sami": "dev-master"
