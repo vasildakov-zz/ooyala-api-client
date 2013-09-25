@@ -211,4 +211,54 @@ class OoyalaClientTest extends BaseTestCase
             "The 'expires' param passed to Client::getCommand() should be used, not the OoyalaClient::onRequestBeforeSend() default."
         );
     }
+
+    /**
+     * @group cache
+     */
+    public function testCachedResponse()
+    {
+        $client = $this->getCDNClient();
+
+
+        $doRequest = function () use ($client) {
+            static $unique;
+
+            if (!$unique) {
+                $unique = time();
+            }
+
+            $beforeSend = function (\Guzzle\Common\Event $event) use ($unique) {
+                /** @var $request \Guzzle\Http\Message\Request */
+                $request = $event['request'];
+                // Make this unique so it will not match the cache key.
+                $request->getQuery()->add('unique', $unique);
+            };
+
+            $client->getEventDispatcher()->addListener('request.before_send', $beforeSend);
+            $command = $client->getCommand('GetAssets');
+            $command->execute();
+
+            $client->getEventDispatcher()->removeListener('request.before_send', $beforeSend);
+
+            return $command;
+        };
+
+        /** @var \Guzzle\Service\Command\CommandInterface $return */
+        $return = $doRequest();
+        $responseHeaders = $return->getResponse()->getHeaders();
+        $this->assertEquals('MISS from GuzzleCache', $responseHeaders->get('X-Cache-Lookup'));
+        $this->assertEquals('MISS from GuzzleCache', $responseHeaders->get('X-Cache'));
+        $firstResponse = (string) $return->getResponse()->getBody();
+
+        // The cache plugin should set the cached response.
+        /** @var \Guzzle\Service\Command\CommandInterface $return */
+        $cachedResponse = $doRequest();
+        $responseHeaders = $cachedResponse->getResponse()->getHeaders();
+        $this->assertEquals('HIT from GuzzleCache', $responseHeaders->get('X-Cache-Lookup'));
+        $this->assertEquals('HIT from GuzzleCache', $responseHeaders->get('X-Cache'));
+        $secondResponse = (string) $cachedResponse->getResponse()->getBody();
+
+        // Assert the same response body
+        $this->assertEquals($firstResponse, $secondResponse);
+    }
 }
