@@ -14,6 +14,14 @@ Guzzle\Tests\GuzzleTestCase::setServiceBuilder(
                 'api_secret' => $_SERVER['API_SECRET'],
             ),
         ),
+        'cdn.ooyala-client' => array(
+            'class' => 'SheKnows\\OoyalaApi\\OoyalaClient',
+            'params' => array(
+                'api_key' => $_SERVER['API_KEY'],
+                'api_secret' => $_SERVER['API_SECRET'],
+                'base_url' => 'https://cdn-api.ooyala.com/{api_version}',
+            ),
+        ),
         'mock.ooyala-client' => array(
             'class' => 'SheKnows\\OoyalaApi\\OoyalaClient',
             'params' => array(
@@ -21,6 +29,6 @@ Guzzle\Tests\GuzzleTestCase::setServiceBuilder(
                 'api_secret' => '456',
                 'base_url'   => 'http://test.local'
             )
-        )
+        ),
     ))
 );

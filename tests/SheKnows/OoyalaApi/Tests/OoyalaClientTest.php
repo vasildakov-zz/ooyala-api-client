@@ -18,7 +18,7 @@ class OoyalaClientTest extends BaseTestCase
 
     /**
      * @expectedException Guzzle\Common\Exception\InvalidArgumentException
-     * @expectedExceptionMessage Config must contain a 'api_key' key
+     * @expectedExceptionMessage Config is missing the following keys: api_key, api_secret
      */
     public function testMissingRequiredParametersThrowsException()
     {
@@ -27,11 +27,28 @@ class OoyalaClientTest extends BaseTestCase
 
     /**
      * @expectedException Guzzle\Common\Exception\InvalidArgumentException
-     * @expectedExceptionMessage Config must contain a 'api_secret' key
+     * @expectedExceptionMessage Config is missing the following keys: api_secret
      */
     public function testMissingApiSecretThrowsException()
     {
         OoyalaClient::factory(array('api_key' => '123'));
+    }
+
+    /**
+     * Test to make sure configuration can override the service definition.
+     */
+    public function testBaseUrlServiceOverride()
+    {
+        $baseUrl = 'https://custom-base.com/{api_version}';
+        $baseUrlExpected = 'https://custom-base.com/v2';
+        $client = OoyalaClient::factory(array(
+            'api_key' => '123',
+            'api_secret' => '456',
+            'api_version' => 'v2',
+            'base_url' => $baseUrl,
+        ));
+
+        $this->assertEquals($baseUrlExpected, $client->getBaseUrl());
     }
 
     public function testValidClientInstanceWhenRequiredParametersPresent()

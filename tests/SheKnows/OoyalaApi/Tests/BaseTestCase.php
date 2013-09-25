@@ -41,4 +41,9 @@ abstract class BaseTestCase extends GuzzleTestCase
         return $this->getServiceBuilder()->get('mock.ooyala-client');
     }
 
+    protected function getCDNClient()
+    {
+        return $this->getServiceBuilder()->get('cdn.ooyala-client');
+    }
+
 }
