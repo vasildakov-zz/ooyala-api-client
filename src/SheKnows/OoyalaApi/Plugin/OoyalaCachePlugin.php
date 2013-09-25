@@ -38,9 +38,15 @@ class OoyalaCachePlugin implements EventSubscriberInterface
                 'max-age'        => 900,
                 'stale-if-error' => 1800,
                 'key_filter'     => 'expires,signature',
+                // Configuration options match \Guzzle\Plugin\Cache\CachePlugin
+                // Defaults for Ooyala
                 'plugin'         => array(
+                    // Revalidation currently skipped. Control with max-age in commands.
+                    // Once Ooyala cache response headers are being sent properly
+                    // this might not be needed.
                     'revalidation' => new SkipRevalidation(),
-                    'cache_cache'  => new CallbackCanCacheStrategy(
+                    // Custom can_cache strategy to deal with a lack of proper response cache headers.
+                    'can_cache'  => new CallbackCanCacheStrategy(
                         function (Request $request) {
                             return true;
                         },
