@@ -33,6 +33,7 @@ class OoyalaCachePlugin implements EventSubscriberInterface
         $config = $client->getConfig();
 
         if (isset($config['ooyala.cache'])) {
+            $config = $config['ooyala.cache'];
             $this->enabled = true;
             $defaults = array(
                 'max-age'        => 900,
@@ -62,7 +63,11 @@ class OoyalaCachePlugin implements EventSubscriberInterface
                 ),
             );
 
-            $this->config = array_merge($defaults, (array) $config['ooyala.cache']);
+            if (isset($config['plugin'])) {
+                $config['plugin'] = array_merge($defaults['plugin'], $config['plugin']);
+            }
+
+            $this->config = array_merge($defaults, (array) $config);
 
             // Add Guzzle's CachePlugin subscriber
             $client->addSubscriber(new CachePlugin($this->getConfig('plugin')));
@@ -81,7 +86,7 @@ class OoyalaCachePlugin implements EventSubscriberInterface
         $request = $command->getRequest();
 
         $request->setHeader('Cache-Control', sprintf(
-            'max-age=%i, stale-if-error=%i',
+            'max-age=%d, stale-if-error=%d',
             $this->getConfig('max-age'),
             $this->getConfig('stale-if-error')
         ));
