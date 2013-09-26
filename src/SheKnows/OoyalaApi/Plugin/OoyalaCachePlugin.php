@@ -18,7 +18,7 @@ class OoyalaCachePlugin implements EventSubscriberInterface
 
     const CACHE_HEADER_DEFAULT_MAX_AGE  = '900';
     const CACHE_HEADER_STALE_IF_ERROR   = '1800';
-    public static CACHE_SUCCESSFUL_STATUS_CODES = array('200', '304');
+    public static $CACHE_SUCCESSFUL_STATUS_CODES = array('200', '304');
 
     public static function getSubscribedEvents()
     {
@@ -58,7 +58,7 @@ class OoyalaCachePlugin implements EventSubscriberInterface
                         },
                         function (Response $response) {
                             $statusCode = $response->getStatusCode();
-                            if (in_array($statusCode, self::SUCCESSFUL_STATUS_CODES)) {
+                            if (in_array($statusCode, self::$CACHE_SUCCESSFUL_STATUS_CODES)) {
                                 return true;
                             }
 
