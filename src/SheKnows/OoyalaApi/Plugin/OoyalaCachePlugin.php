@@ -13,10 +13,12 @@ use \Symfony\Component\EventDispatcher\EventSubscriberInterface;
 
 class OoyalaCachePlugin implements EventSubscriberInterface
 {
-
     private $config = array();
-
     private $enabled = false;
+
+    const CACHE_HEADER_DEFAULT_MAX_AGE  = '900';
+    const CACHE_HEADER_STALE_IF_ERROR   = '1800';
+    const CACHE_SUCCESSFUL_STATUS_CODES = array('200', '304');
 
     public static function getSubscribedEvents()
     {
@@ -36,16 +38,19 @@ class OoyalaCachePlugin implements EventSubscriberInterface
             $config = $config['ooyala.cache'];
             $this->enabled = true;
             $defaults = array(
-                'max-age'        => 900,
-                'stale-if-error' => 1800,
+                'max-age'        => self::CACHE_HEADER_DEFAULT_MAX_AGE,
+                'stale-if-error' => self::CACHE_HEADER_STALE_IF_ERROR,
                 'key_filter'     => 'expires,signature',
+
                 // Configuration options match \Guzzle\Plugin\Cache\CachePlugin
                 // Defaults for Ooyala
                 'plugin'         => array(
+
                     // Revalidation currently skipped. Control with max-age in commands.
                     // Once Ooyala cache response headers are being sent properly
                     // this might not be needed.
                     'revalidation' => new SkipRevalidation(),
+
                     // Custom can_cache strategy to deal with a lack of proper response cache headers.
                     'can_cache'  => new CallbackCanCacheStrategy(
                         function (Request $request) {
@@ -53,7 +58,7 @@ class OoyalaCachePlugin implements EventSubscriberInterface
                         },
                         function (Response $response) {
                             $statusCode = $response->getStatusCode();
-                            if (in_array($statusCode, array('200', '304'))) {
+                            if (in_array($statusCode, self::SUCCESSFUL_STATUS_CODES)) {
                                 return true;
                             }
 

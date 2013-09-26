@@ -214,6 +214,7 @@ class OoyalaClientTest extends BaseTestCase
 
     /**
      * @group cache
+     * @group internet
      */
     public function testCachedResponse()
     {
