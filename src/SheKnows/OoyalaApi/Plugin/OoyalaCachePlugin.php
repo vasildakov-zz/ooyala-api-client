@@ -138,7 +138,6 @@ class OoyalaCachePlugin implements EventSubscriberInterface
                     $this->guzzleCachePlugin->onRequestBeforeSend(new Event(array(
                         'request' => $request
                     )));
-                    $request->setState(Request::STATE_COMPLETE, array('request' => $request));
                 }
             }
         }
