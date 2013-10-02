@@ -9,6 +9,7 @@ use Guzzle\Http\Message\Response;
 use Guzzle\Plugin\Cache\CachePlugin;
 use Guzzle\Plugin\Cache\CallbackCanCacheStrategy;
 use Guzzle\Plugin\Cache\SkipRevalidation;
+use Guzzle\Http\Exception\CurlException;
 use \Symfony\Component\EventDispatcher\EventSubscriberInterface;
 
 class OoyalaCachePlugin implements EventSubscriberInterface
@@ -20,11 +21,17 @@ class OoyalaCachePlugin implements EventSubscriberInterface
     const CACHE_HEADER_STALE_IF_ERROR   = '1800';
     public static $CACHE_SUCCESSFUL_STATUS_CODES = array('200', '304');
 
+    /**
+     * @var \Guzzle\Plugin\Cache\CachePlugin
+     */
+    public $guzzleCachePlugin;
+
     public static function getSubscribedEvents()
     {
         return array(
             'ooyala.client.initialized' => array('onClientCreated'),
             'command.before_send'       => array('onCommandBeforeSend'),
+            'request.exception'         => array('onRequestException'),
         );
     }
 
@@ -74,8 +81,10 @@ class OoyalaCachePlugin implements EventSubscriberInterface
 
             $this->config = array_merge($defaults, (array) $config);
 
+            $this->guzzleCachePlugin = new CachePlugin($this->getConfig('plugin'));
+
             // Add Guzzle's CachePlugin subscriber
-            $client->addSubscriber(new CachePlugin($this->getConfig('plugin')));
+            $client->addSubscriber($this->guzzleCachePlugin);
         }
     }
 
@@ -97,6 +106,42 @@ class OoyalaCachePlugin implements EventSubscriberInterface
         ));
 
         $request->getParams()->set('cache.key_filter', $this->getConfig('key_filter'));
+    }
+
+    /**
+     * This is a very hacked way to listen for a cURL timeout.
+     * and serve a cached response from stale cache.
+     *
+     * The Guzzle\Plugin\Cache\CachePlugin::onBeforeRequestSend event listener
+     * method is called manually to allow the plugin to set the cached response.
+     *
+     * @param Event $event
+     */
+    public function onRequestException(Event $event)
+    {
+        $exception = $event['exception'];
+        /** @var \Guzzle\Http\Message\Request $request */
+        $request =& $event['request'];
+        if (
+            $exception instanceof CurlException &&
+            $exception->getErrorNo() === CURLE_OPERATION_TIMEOUTED
+        ) {
+            if ($this->guzzleCachePlugin->canResponseSatisfyFailedRequest($event['request'], new Response(408))) {
+                $cacheControl = $request->getHeader('Cache-Control');
+                if (
+                    $cacheControl &&
+                    $cacheControl->hasDirective('max-age') &&
+                    $cacheControl->hasDirective('stale-if-error')
+                ) {
+                    // Hack the max-age so the CachePlugin will accept the request as cacheable.
+                    $cacheControl->addDirective('max-age', $this->getConfig('stale-if-error'));
+                    $this->guzzleCachePlugin->onRequestBeforeSend(new Event(array(
+                        'request' => $request
+                    )));
+                    $request->setState(Request::STATE_COMPLETE, array('request' => $request));
+                }
+            }
+        }
     }
 
     private function getConfig($key)
