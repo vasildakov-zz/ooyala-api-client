@@ -58,7 +58,7 @@ class OoyalaCachePlugin implements EventSubscriberInterface
                         },
                         function (Response $response) {
                             $statusCode = $response->getStatusCode();
-                            if (in_array($statusCode, self::$CACHE_SUCCESSFUL_STATUS_CODES)) {
+                            if (in_array($statusCode, OoyalaCachePlugin::$CACHE_SUCCESSFUL_STATUS_CODES)) {
                                 return true;
                             }
 
