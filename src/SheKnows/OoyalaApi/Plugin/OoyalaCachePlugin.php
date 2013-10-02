@@ -122,23 +122,29 @@ class OoyalaCachePlugin implements EventSubscriberInterface
         $exception = $event['exception'];
         /** @var \Guzzle\Http\Message\Request $request */
         $request =& $event['request'];
+
+        if (!$request) {
+            return;
+        }
+
+        $cacheControl = $request->getHeader('Cache-Control');
+
+        // Make sure the response can satisfy a request manually before proceeding.
         if (
             $exception instanceof CurlException &&
-            $exception->getErrorNo() === CURLE_OPERATION_TIMEOUTED
+            $exception->getErrorNo() === CURLE_OPERATION_TIMEOUTED &&
+            $this->guzzleCachePlugin->canResponseSatisfyFailedRequest($event['request'], new Response(408))
         ) {
-            if ($this->guzzleCachePlugin->canResponseSatisfyFailedRequest($event['request'], new Response(408))) {
-                $cacheControl = $request->getHeader('Cache-Control');
-                if (
-                    $cacheControl &&
-                    $cacheControl->hasDirective('max-age') &&
-                    $cacheControl->hasDirective('stale-if-error')
-                ) {
-                    // Hack the max-age so the CachePlugin will accept the request as cacheable.
-                    $cacheControl->addDirective('max-age', $this->getConfig('stale-if-error'));
-                    $this->guzzleCachePlugin->onRequestBeforeSend(new Event(array(
-                        'request' => $request
-                    )));
-                }
+            if (
+                $cacheControl &&
+                $cacheControl->hasDirective('max-age') &&
+                $cacheControl->hasDirective('stale-if-error')
+            ) {
+                // Hack the max-age so the CachePlugin will accept the request as cacheable.
+                $cacheControl->addDirective('max-age', $this->getConfig('stale-if-error'));
+                $this->guzzleCachePlugin->onRequestBeforeSend(new Event(array(
+                    'request' => $request
+                )));
             }
         }
     }
