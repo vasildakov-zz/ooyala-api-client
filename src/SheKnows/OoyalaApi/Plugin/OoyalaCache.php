@@ -29,7 +29,7 @@ class OoyalaCache implements EventSubscriberInterface
     {
         return array(
             'ooyala.client.initialized' => array('onClientCreated'),
-            'request.before_send'       => array('onRequestBeforeSend'),
+            'request.before_send'       => array('onRequestBeforeSend', -10),
             'request.exception'         => array('onRequestException'),
         );
     }
@@ -95,13 +95,27 @@ class OoyalaCache implements EventSubscriberInterface
         /** @var $request \Guzzle\Http\Message\Request */
         $request = $event['request'];
 
-        $request->setHeader('Cache-Control', sprintf(
-            'max-age=%d, stale-if-error=%d',
-            $this->getConfig('max-age'),
-            $this->getConfig('stale-if-error')
-        ));
-
         $request->getParams()->set('cache.key_filter', $this->getConfig('key_filter'));
+
+        if (!$request->hasHeader('Cache-Control')) {
+            $request->setHeader('Cache-Control', sprintf(
+                'max-age=%d, stale-if-error=%d',
+                $this->getConfig('max-age'),
+                $this->getConfig('stale-if-error')
+            ));
+            return;
+        }
+
+        $cacheControl = $request->getHeader('Cache-Control');
+
+        foreach (array('max-age', 'stale-if-error') as $directive) {
+            if (!$cacheControl->hasDirective($directive)) {
+                $cacheControl->addDirective(
+                    $directive,
+                    sprintf($directive . '%d', $this->getConfig($directive))
+                );
+            }
+        }
     }
 
     /**

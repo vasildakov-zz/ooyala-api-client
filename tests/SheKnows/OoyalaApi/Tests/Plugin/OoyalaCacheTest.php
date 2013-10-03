@@ -14,8 +14,6 @@ class OoyalaCacheTest extends BaseTestCase
 {
     /**
      * Test that the OoyalaCache subscriber is removed if no configuration is provided.
-     *
-     * @group test
      */
     public function test_cache_configuration_config_missing()
     {
@@ -44,9 +42,6 @@ class OoyalaCacheTest extends BaseTestCase
         }
     }
 
-    /**
-     * @group test
-     */
     public function test_cache_configuration_config_present()
     {
         $client = new Client('http://test.com', array(
@@ -77,9 +72,6 @@ class OoyalaCacheTest extends BaseTestCase
         }
     }
 
-    /**
-     * @group test
-     */
     public function test_onCommandBeforeSend_method()
     {
         $client = $this->getCacheEnabledClient();
@@ -95,6 +87,30 @@ class OoyalaCacheTest extends BaseTestCase
         $cacheControl = $request->getHeader('Cache-Control');
 
         foreach (array('max-age' => 900, 'stale-if-error' => 3600) as $directive => $value) {
+            $this->assertTrue($cacheControl->hasDirective($directive));
+            $this->assertEquals($value, $cacheControl->getDirective($directive));
+        }
+    }
+
+    public function test_onRequestBeforeSend_respects_cache_control_header()
+    {
+        $client = $this->getCacheEnabledClient();
+        $beforeSend = function (Event $event) {
+            $request = $event['request'];
+            $request->setHeader('Cache-Control', 'max-age=10, stale-if-error=20');
+        };
+
+        $client->getEventDispatcher()->addListener('request.before_send', $beforeSend, 0);
+
+        $command = $client->getCommand('GetAssets');
+        $command->prepare();
+        $request = $command->getRequest();
+        $request->setState(Request::STATE_TRANSFER);
+
+        $this->assertTrue($request->hasHeader('Cache-Control'));
+        $cacheControl = $request->getHeader('Cache-Control');
+
+        foreach (array('max-age' => 10, 'stale-if-error' => 20) as $directive => $value) {
             $this->assertTrue($cacheControl->hasDirective($directive));
             $this->assertEquals($value, $cacheControl->getDirective($directive));
         }
