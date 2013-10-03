@@ -2,21 +2,15 @@
 
 namespace SheKnows\OoyalaApi;
 
-use Doctrine\Common\Cache\FilesystemCache;
-use Guzzle\Cache\DoctrineCacheAdapter;
 use Guzzle\Http\Message\Request;
 use Guzzle\Http\Message\Response;
-use Guzzle\Plugin\Cache\CachePlugin;
-use Guzzle\Plugin\Cache\CallbackCanCacheStrategy;
-use Guzzle\Plugin\Cache\DefaultCacheStorage;
-use Guzzle\Plugin\Cache\SkipRevalidation;
-use SheKnows\OoyalaApi\Plugin\OoyalaCachePlugin;
-use SheKnows\OoyalaApi\Plugin\OoyalaSignature;
-
 use Guzzle\Service\Client;
 use Guzzle\Common\Event;
 use Guzzle\Service\Description\ServiceDescription;
 use Guzzle\Common\Collection;
+
+use SheKnows\OoyalaApi\Plugin\OoyalaCache;
+use SheKnows\OoyalaApi\Plugin\OoyalaSignature;
 
 /**
  * Ooyala Http client.
@@ -70,7 +64,7 @@ class OoyalaClient extends Client
         $client
             ->setDescription($description)
             ->addSubscriber(new OoyalaSignature($client->apiSecret))
-            ->addSubscriber(new OoyalaCachePlugin())
+            ->addSubscriber(new OoyalaCache())
             ->dispatch(OoyalaClient::EVENT_INITIALIZED, array('client' => $client))
         ;
 

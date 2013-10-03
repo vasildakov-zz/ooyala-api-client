@@ -12,7 +12,7 @@ use Guzzle\Plugin\Cache\SkipRevalidation;
 use Guzzle\Http\Exception\CurlException;
 use \Symfony\Component\EventDispatcher\EventSubscriberInterface;
 
-class OoyalaCachePlugin implements EventSubscriberInterface
+class OoyalaCache implements EventSubscriberInterface
 {
     private $config = array();
     private $enabled = false;
@@ -65,7 +65,7 @@ class OoyalaCachePlugin implements EventSubscriberInterface
                         },
                         function (Response $response) {
                             $statusCode = $response->getStatusCode();
-                            if (in_array($statusCode, OoyalaCachePlugin::$CACHE_SUCCESSFUL_STATUS_CODES)) {
+                            if (in_array($statusCode, OoyalaCache::$CACHE_SUCCESSFUL_STATUS_CODES)) {
                                 return true;
                             }
 
