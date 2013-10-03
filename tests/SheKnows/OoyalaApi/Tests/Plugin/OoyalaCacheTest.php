@@ -42,6 +42,13 @@ class OoyalaCacheTest extends BaseTestCase
         }
     }
 
+    /**
+     * Sanity check to make sure that OoyalaCache is a subscriber.
+     *
+     * The only reason this is needed is because the plugin might be disabled
+     * because of configuration, so it's good to check when some configuration
+     * is present that the plugin actually does not remove itself as a subscriber.
+     */
     public function test_cache_configuration_config_present()
     {
         $client = new Client('http://test.com', array(
@@ -72,6 +79,11 @@ class OoyalaCacheTest extends BaseTestCase
         }
     }
 
+    /**
+     * Make sure that the onCommandBeforeSend method actually sets Cache-Control headers.
+     *
+     * Test uses the default configured client values.
+     */
     public function test_onCommandBeforeSend_method()
     {
         $client = $this->getCacheEnabledClient();
@@ -92,6 +104,12 @@ class OoyalaCacheTest extends BaseTestCase
         }
     }
 
+    /**
+     * Test that existing request Cache-Control headers are respected.
+     *
+     * When other listeners or requests set the Cache-Control directives,
+     * the OoyalaCache subscriber should skip setting those directives.
+     */
     public function test_onRequestBeforeSend_respects_cache_control_header()
     {
         $client = $this->getCacheEnabledClient();
