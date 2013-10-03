@@ -112,7 +112,7 @@ class OoyalaCache implements EventSubscriberInterface
             if (!$cacheControl->hasDirective($directive)) {
                 $cacheControl->addDirective(
                     $directive,
-                    sprintf($directive . '%d', $this->getConfig($directive))
+                    $this->getConfig($directive)
                 );
             }
         }

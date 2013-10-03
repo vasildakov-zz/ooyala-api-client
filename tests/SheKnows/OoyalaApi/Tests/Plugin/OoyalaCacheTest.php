@@ -115,7 +115,7 @@ class OoyalaCacheTest extends BaseTestCase
         $client = $this->getCacheEnabledClient();
         $beforeSend = function (Event $event) {
             $request = $event['request'];
-            $request->setHeader('Cache-Control', 'max-age=10, stale-if-error=20');
+            $request->setHeader('Cache-Control', 'max-age=10');
         };
 
         $client->getEventDispatcher()->addListener('request.before_send', $beforeSend, 0);
@@ -128,7 +128,7 @@ class OoyalaCacheTest extends BaseTestCase
         $this->assertTrue($request->hasHeader('Cache-Control'));
         $cacheControl = $request->getHeader('Cache-Control');
 
-        foreach (array('max-age' => 10, 'stale-if-error' => 20) as $directive => $value) {
+        foreach (array('max-age' => 10, 'stale-if-error' => 3600) as $directive => $value) {
             $this->assertTrue($cacheControl->hasDirective($directive));
             $this->assertEquals($value, $cacheControl->getDirective($directive));
         }
