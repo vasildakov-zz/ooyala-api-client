@@ -36,7 +36,10 @@ Guzzle\Tests\GuzzleTestCase::setServiceBuilder(
                 'api_key' => $_SERVER['API_KEY'],
                 'api_secret' => $_SERVER['API_SECRET'],
                 'base_url' => 'https://cdn-api.ooyala.com/{api_version}',
-                'ooyala.cache' => true,
+                'ooyala.cache' => array(
+                    'max-age' => 900,
+                    'stale-if-error' => 3600
+                ),
                 'request.options' => array(
                     'timeout' => 0,
                     'connect_timeout' => 0,

@@ -29,7 +29,7 @@ class OoyalaCache implements EventSubscriberInterface
     {
         return array(
             'ooyala.client.initialized' => array('onClientCreated'),
-            'command.before_send'       => array('onCommandBeforeSend'),
+            'request.before_send'       => array('onRequestBeforeSend'),
             'request.exception'         => array('onRequestException'),
         );
     }
@@ -90,12 +90,10 @@ class OoyalaCache implements EventSubscriberInterface
         $client->addSubscriber($this->guzzleCachePlugin);
     }
 
-    public function onCommandBeforeSend(Event $event)
+    public function onRequestBeforeSend(Event $event)
     {
-        /** @var $command \Guzzle\Service\Command\OperationCommand */
-        $command = $event['command'];
         /** @var $request \Guzzle\Http\Message\Request */
-        $request = $command->getRequest();
+        $request = $event['request'];
 
         $request->setHeader('Cache-Control', sprintf(
             'max-age=%d, stale-if-error=%d',
@@ -147,7 +145,7 @@ class OoyalaCache implements EventSubscriberInterface
         }
     }
 
-    private function getConfig($key)
+    public function getConfig($key)
     {
         if (isset($this->config[$key])) {
             return $this->config[$key];
