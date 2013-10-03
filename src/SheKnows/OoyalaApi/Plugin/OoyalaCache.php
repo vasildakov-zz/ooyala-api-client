@@ -10,12 +10,11 @@ use Guzzle\Plugin\Cache\CachePlugin;
 use Guzzle\Plugin\Cache\CallbackCanCacheStrategy;
 use Guzzle\Plugin\Cache\SkipRevalidation;
 use Guzzle\Http\Exception\CurlException;
-use \Symfony\Component\EventDispatcher\EventSubscriberInterface;
+use Symfony\Component\EventDispatcher\EventSubscriberInterface;
 
 class OoyalaCache implements EventSubscriberInterface
 {
     private $config = array();
-    private $enabled = false;
 
     const CACHE_HEADER_DEFAULT_MAX_AGE  = '900';
     const CACHE_HEADER_STALE_IF_ERROR   = '1800';
@@ -41,59 +40,58 @@ class OoyalaCache implements EventSubscriberInterface
         $client = $event['client'];
         $config = $client->getConfig();
 
-        if (isset($config['ooyala.cache'])) {
-            $config = $config['ooyala.cache'];
-            $this->enabled = true;
-            $defaults = array(
-                'max-age'        => self::CACHE_HEADER_DEFAULT_MAX_AGE,
-                'stale-if-error' => self::CACHE_HEADER_STALE_IF_ERROR,
-                'key_filter'     => 'expires,signature',
-
-                // Configuration options match \Guzzle\Plugin\Cache\CachePlugin
-                // Defaults for Ooyala
-                'plugin'         => array(
-
-                    // Revalidation currently skipped. Control with max-age in commands.
-                    // Once Ooyala cache response headers are being sent properly
-                    // this might not be needed.
-                    'revalidation' => new SkipRevalidation(),
-
-                    // Custom can_cache strategy to deal with a lack of proper response cache headers.
-                    'can_cache'  => new CallbackCanCacheStrategy(
-                        function (Request $request) {
-                            return true;
-                        },
-                        function (Response $response) {
-                            $statusCode = $response->getStatusCode();
-                            if (in_array($statusCode, OoyalaCache::$CACHE_SUCCESSFUL_STATUS_CODES)) {
-                                return true;
-                            }
-
-                            return false;
-                        }
-                    )
-                ),
-            );
-
-            if (isset($config['plugin'])) {
-                $config['plugin'] = array_merge($defaults['plugin'], $config['plugin']);
-            }
-
-            $this->config = array_merge($defaults, (array) $config);
-
-            $this->guzzleCachePlugin = new CachePlugin($this->getConfig('plugin'));
-
-            // Add Guzzle's CachePlugin subscriber
-            $client->addSubscriber($this->guzzleCachePlugin);
+        // If cache is not configured, remove this subscriber
+        if (!isset($config['ooyala.cache'])) {
+            $client->getEventDispatcher()->removeSubscriber($this);
+            return;
         }
+
+        $config = $config['ooyala.cache'];
+        $defaults = array(
+            'max-age'        => self::CACHE_HEADER_DEFAULT_MAX_AGE,
+            'stale-if-error' => self::CACHE_HEADER_STALE_IF_ERROR,
+            'key_filter'     => 'expires,signature',
+
+            // Configuration options match \Guzzle\Plugin\Cache\CachePlugin
+            // Defaults for Ooyala
+            'plugin'         => array(
+
+                // Revalidation currently skipped. Control with max-age in commands.
+                // Once Ooyala cache response headers are being sent properly
+                // this might not be needed.
+                'revalidation' => new SkipRevalidation(),
+
+                // Custom can_cache strategy to deal with a lack of proper response cache headers.
+                'can_cache'  => new CallbackCanCacheStrategy(
+                    function (Request $request) {
+                        return true;
+                    },
+                    function (Response $response) {
+                        $statusCode = $response->getStatusCode();
+                        if (in_array($statusCode, OoyalaCache::$CACHE_SUCCESSFUL_STATUS_CODES)) {
+                            return true;
+                        }
+
+                        return false;
+                    }
+                )
+            ),
+        );
+
+        if (isset($config['plugin'])) {
+            $config['plugin'] = array_merge($defaults['plugin'], $config['plugin']);
+        }
+
+        $this->config = array_merge($defaults, (array) $config);
+
+        $this->guzzleCachePlugin = new CachePlugin($this->getConfig('plugin'));
+
+        // Add Guzzle's CachePlugin subscriber
+        $client->addSubscriber($this->guzzleCachePlugin);
     }
 
     public function onCommandBeforeSend(Event $event)
     {
-        if (!$this->isEnabled()) {
-            return;
-        }
-
         /** @var $command \Guzzle\Service\Command\OperationCommand */
         $command = $event['command'];
         /** @var $request \Guzzle\Http\Message\Request */
@@ -119,10 +117,6 @@ class OoyalaCache implements EventSubscriberInterface
      */
     public function onRequestException(Event $event)
     {
-        if (!$this->isEnabled()) {
-            return;
-        }
-
         $exception = $event['exception'];
         /** @var \Guzzle\Http\Message\Request $request */
         $request =& $event['request'];
@@ -160,10 +154,5 @@ class OoyalaCache implements EventSubscriberInterface
         }
 
         return null;
-    }
-
-    private function isEnabled()
-    {
-        return $this->enabled;
     }
 }
