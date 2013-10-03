@@ -119,6 +119,10 @@ class OoyalaCachePlugin implements EventSubscriberInterface
      */
     public function onRequestException(Event $event)
     {
+        if (!$this->isEnabled()) {
+            return;
+        }
+
         $exception = $event['exception'];
         /** @var \Guzzle\Http\Message\Request $request */
         $request =& $event['request'];
