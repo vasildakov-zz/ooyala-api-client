@@ -182,7 +182,7 @@ class OoyalaCacheTest extends BaseTestCase
                 $response->getHeader('X-Cache'),
                 'X-Cache should be a `HIT_ERROR from GuzzleCache`'
             );
-            $this->assertEquals(
+            $self->assertEquals(
                 'HIT from GuzzleCache',
                 $response->getHeader('X-Cache-Lookup'),
                 'X-Cache-Lookup should be `HIT FROM GuzzleCache`'
