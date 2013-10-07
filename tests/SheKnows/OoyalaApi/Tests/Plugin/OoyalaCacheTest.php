@@ -206,4 +206,35 @@ class OoyalaCacheTest extends BaseTestCase
             unset($command);
         }
     }
+
+    /**
+     * @group internet
+     */
+    public function test_request_timeout_serves_stale_response()
+    {
+        $client = $this->getCacheEnabledClient();
+        $command = $client->getCommand('GetAssets');
+
+        $command->execute();
+        $response = $command->getResponse();
+
+        unset($command, $response);
+
+
+        $client->getConfig()->set('request.options', array(
+            'timeout' => 0.001,
+            'connect_timeout' => 0.001,
+        ));
+
+        $client->getEventDispatcher()->addListener('request.before_send', function (Event $event) {
+            $request = $event['request'];
+            $request->setHeader('Cache-Control', 'max-age=0, stale-if-error=3600');
+        }, 0);
+
+        $command = $client->getCommand('GetAssets');
+        $command->execute();
+        $response = $command->getResponse();
+        $this->assertEquals('HIT from GuzzleCache', (string) $response->getHeader('X-Cache'));
+        $this->assertEquals('HIT from GuzzleCache', (string) $response->getHeader('X-Cache-Lookup'));
+    }
 }
