@@ -133,4 +133,72 @@ class OoyalaCacheTest extends BaseTestCase
             $this->assertEquals($value, $cacheControl->getDirective($directive));
         }
     }
+
+
+    /**
+     * @group offline
+     */
+    public function test_onRequestError_caching()
+    {
+        $client = $this->getCacheEnabledClient();
+
+        /**
+         * Make sure the eventual response will be "cacheable"
+         * Mocked data will be out-of-date so new
+         * `Last-Modified` and `Date` headers are needed.
+         */
+        $requestSent = function (Event $event) {
+            /** @var \Guzzle\Http\Message\Response $response */
+            $response = $event['response'];
+            $date = new \DateTime('-10 seconds');
+            $value = $date->format(\DateTime::RFC2822);
+            $response
+                ->setHeader('Last-Modified', $value)
+                ->setHeader('Date', $value)
+            ;
+        };
+
+        $client->getEventDispatcher()->addListener('request.sent', $requestSent, 1000);
+
+        $this->setMockResponse($client, '/Assets/GetAssetsWithMetadataAndLabels');
+        $command = $client->getCommand('GetAssets');
+        $command->execute();
+        $response = $command->getResponse();
+
+        $client->getEventDispatcher()->removeListener('request.sent', $requestSent);
+
+        $this->assertEquals('MISS from GuzzleCache', $response->getHeader('X-Cache'));
+        $this->assertEquals('MISS from GuzzleCache', $response->getHeader('X-Cache-Lookup'));
+
+        /**
+         * Test stale responses being served in the event of an error.
+         */
+
+        // Make CachePlugin skip the stored response from the warmed cached.
+        // Needed so that a 4xx response will be triggered from the mock.
+        $beforeSend = function (Event $event) {
+            $request = $event['request'];
+            $request->setHeader('Cache-Control', 'max-age=0, stale-if-error=3600');
+        };
+
+        $client->getEventDispatcher()->addListener('request.before_send', $beforeSend, 0);
+
+        $this->setMockResponse($client, '/RateLimitReached');
+        $command = $client->getCommand('GetAssets');
+        $command->execute();
+
+        $response = $command->getResponse();
+
+        $this->assertEquals(
+            'HIT_ERROR from GuzzleCache',
+            $response->getHeader('X-Cache'),
+            'X-Cache should be a `HIT_ERROR from GuzzleCache`'
+        );
+        $this->assertEquals(
+            'HIT from GuzzleCache',
+            $response->getHeader('X-Cache-Lookup'),
+            'X-Cache-Lookup should be `HIT FROM GuzzleCache`'
+        );
+
+    }
 }
