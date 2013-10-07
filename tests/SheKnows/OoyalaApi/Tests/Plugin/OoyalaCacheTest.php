@@ -4,8 +4,9 @@ namespace SheKnows\OoyalaApi\Tests\Plugin;
 
 use Guzzle\Http\Client;
 use Guzzle\Common\Event;
-
 use Guzzle\Http\Message\Request;
+use Guzzle\Http\Message\Response;
+
 use SheKnows\OoyalaApi\Tests\BaseTestCase;
 use SheKnows\OoyalaApi\Plugin\OoyalaCache;
 use SheKnows\OoyalaApi\OoyalaClient;
@@ -174,31 +175,35 @@ class OoyalaCacheTest extends BaseTestCase
          * Test stale responses being served in the event of an error.
          */
 
-        // Make CachePlugin skip the stored response from the warmed cached.
-        // Needed so that a 4xx response will be triggered from the mock.
-        $beforeSend = function (Event $event) {
-            $request = $event['request'];
-            $request->setHeader('Cache-Control', 'max-age=0, stale-if-error=3600');
+        $self = $this;
+        $assertHitError = function (Response $response) use ($self) {
+            $self->assertEquals(
+                'HIT_ERROR from GuzzleCache',
+                $response->getHeader('X-Cache'),
+                'X-Cache should be a `HIT_ERROR from GuzzleCache`'
+            );
+            $this->assertEquals(
+                'HIT from GuzzleCache',
+                $response->getHeader('X-Cache-Lookup'),
+                'X-Cache-Lookup should be `HIT FROM GuzzleCache`'
+            );
         };
 
-        $client->getEventDispatcher()->addListener('request.before_send', $beforeSend, 0);
+        // Make CachePlugin skip the stored response from the warmed cached.
+        // Needed so that a 4xx response will be triggered from the mock.
+        $client->getEventDispatcher()->addListener('request.before_send', function (Event $event) {
+            $request = $event['request'];
+            $request->setHeader('Cache-Control', 'max-age=0, stale-if-error=3600');
+        }, 0);
 
-        $this->setMockResponse($client, '/RateLimitReached');
-        $command = $client->getCommand('GetAssets');
-        $command->execute();
 
-        $response = $command->getResponse();
+        foreach (array('/RateLimitReached', '/500InternelServerError') as $mock) {
+            $this->setMockResponse($client, $mock);
+            $command = $client->getCommand('GetAssets');
+            $command->execute();
 
-        $this->assertEquals(
-            'HIT_ERROR from GuzzleCache',
-            $response->getHeader('X-Cache'),
-            'X-Cache should be a `HIT_ERROR from GuzzleCache`'
-        );
-        $this->assertEquals(
-            'HIT from GuzzleCache',
-            $response->getHeader('X-Cache-Lookup'),
-            'X-Cache-Lookup should be `HIT FROM GuzzleCache`'
-        );
-
+            $assertHitError($command->getResponse());
+            unset($command);
+        }
     }
 }
