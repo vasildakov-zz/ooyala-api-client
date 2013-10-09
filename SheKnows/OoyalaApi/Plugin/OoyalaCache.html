@@ -1,0 +1,275 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8" />
+        <meta name="robots" content="index, follow, all" />
+        <title>SheKnows\OoyalaApi\Plugin\OoyalaCache | </title>
+                    <link rel="stylesheet" type="text/css" href="../../../stylesheet.css">
+                            </head>
+        <body id="class">
+            <div class="header">
+        <ul>
+            <li><a href="../../../classes.html">Classes</a></li>
+                            <li><a href="../../../namespaces.html">Namespaces</a></li>
+                        <li><a href="../../../interfaces.html">Interfaces</a></li>
+            <li><a href="../../../traits.html">Traits</a></li>
+            <li><a href="../../../doc-index.html">Index</a></li>
+            
+        </ul>
+
+        <div id="title"></div>
+
+            <div class="type">Class</div>
+    <h1><a href="../../../SheKnows/OoyalaApi/Plugin.html">SheKnows\OoyalaApi\Plugin</a>\OoyalaCache</h1>
+    </div>
+        <div class="content">
+                <p>    class
+    <strong>OoyalaCache</strong>        implements
+        <abbr title="Symfony\Component\EventDispatcher\EventSubscriberInterface">EventSubscriberInterface</abbr></p>
+
+    
+            <h2>Constants</h2>
+
+            <table>
+                    <tr>
+                <td>CACHE_HEADER_DEFAULT_MAX_AGE</td>
+                <td class="last">
+                    <p><em>
+</em></p>
+                    <p>
+</p>
+                </td>
+            </tr>
+                    <tr>
+                <td>CACHE_HEADER_STALE_IF_ERROR</td>
+                <td class="last">
+                    <p><em>
+</em></p>
+                    <p>
+</p>
+                </td>
+            </tr>
+            </table>
+
+    
+            <h2>Properties</h2>
+
+            <table>
+                    <tr>
+                <td class="type" id="property_CACHE_SUCCESSFUL_STATUS_CODES">
+                    static                                        
+                </td>
+                <td>$CACHE_SUCCESSFUL_STATUS_CODES</td>
+                <td class="last">
+</td>
+            </tr>
+                    <tr>
+                <td class="type" id="property_guzzleCachePlugin">
+                                                            <abbr title="Guzzle\Plugin\Cache\CachePlugin">CachePlugin</abbr>
+                </td>
+                <td>$guzzleCachePlugin</td>
+                <td class="last">
+</td>
+            </tr>
+            </table>
+
+    
+            <h2>Methods</h2>
+
+            <table>
+                    <tr>
+                <td class="type">
+                    static&nbsp;
+                </td>
+                <td class="last">
+                    <a href="#method_getSubscribedEvents">getSubscribedEvents</a>()
+                    <p>
+</p>
+                </td>
+                <td></td>
+            </tr>
+                    <tr>
+                <td class="type">
+                    
+                </td>
+                <td class="last">
+                    <a href="#method_onClientCreated">onClientCreated</a>(<abbr title="Guzzle\Common\Event">Event</abbr> $event)
+                    <p>
+</p>
+                </td>
+                <td></td>
+            </tr>
+                    <tr>
+                <td class="type">
+                    
+                </td>
+                <td class="last">
+                    <a href="#method_onRequestBeforeSend">onRequestBeforeSend</a>(<abbr title="Guzzle\Common\Event">Event</abbr> $event)
+                    <p>
+</p>
+                </td>
+                <td></td>
+            </tr>
+                    <tr>
+                <td class="type">
+                    
+                </td>
+                <td class="last">
+                    <a href="#method_onRequestException">onRequestException</a>(<abbr title="Guzzle\Common\Event">Event</abbr> $event)
+                    <p>This is a very hacked way to listen for a cURL timeout.</p>
+                </td>
+                <td></td>
+            </tr>
+                    <tr>
+                <td class="type">
+                    
+                </td>
+                <td class="last">
+                    <a href="#method_getConfig">getConfig</a>($key)
+                    <p>
+</p>
+                </td>
+                <td></td>
+            </tr>
+            </table>
+
+
+        <h2>Details</h2>
+
+                        <h3 id="method_getSubscribedEvents">
+        <div class="location">at line 28</div>
+        <code>        static    public            
+    <strong>getSubscribedEvents</strong>()</code>
+    </h3>
+    <div class="details">
+        <p>
+</p>
+        <p>
+</p>
+        <div class="tags">
+            
+            
+            
+                    </div>
+    </div>
+
+                <h3 id="method_onClientCreated">
+        <div class="location">at line 37</div>
+        <code>            public            
+    <strong>onClientCreated</strong>(<abbr title="Guzzle\Common\Event">Event</abbr> $event)</code>
+    </h3>
+    <div class="details">
+        <p>
+</p>
+        <p>
+</p>
+        <div class="tags">
+                            <h4>Parameters</h4>
+
+                    <table>
+                    <tr>
+                <td><abbr title="Guzzle\Common\Event">Event</abbr></td>
+                <td>$event</td>
+                <td>
+</td>
+            </tr>
+            </table>
+
+            
+            
+            
+                    </div>
+    </div>
+
+                <h3 id="method_onRequestBeforeSend">
+        <div class="location">at line 93</div>
+        <code>            public            
+    <strong>onRequestBeforeSend</strong>(<abbr title="Guzzle\Common\Event">Event</abbr> $event)</code>
+    </h3>
+    <div class="details">
+        <p>
+</p>
+        <p>
+</p>
+        <div class="tags">
+                            <h4>Parameters</h4>
+
+                    <table>
+                    <tr>
+                <td><abbr title="Guzzle\Common\Event">Event</abbr></td>
+                <td>$event</td>
+                <td>
+</td>
+            </tr>
+            </table>
+
+            
+            
+            
+                    </div>
+    </div>
+
+                <h3 id="method_onRequestException">
+        <div class="location">at line 130</div>
+        <code>            public            
+    <strong>onRequestException</strong>(<abbr title="Guzzle\Common\Event">Event</abbr> $event)</code>
+    </h3>
+    <div class="details">
+        <p>This is a very hacked way to listen for a cURL timeout.</p>
+        <p>and serve a cached response from stale cache.</p>
+
+<p>The Guzzle\Plugin\Cache\CachePlugin::onBeforeRequestSend event listener
+method is called manually to allow the plugin to set the cached response.</p>
+        <div class="tags">
+                            <h4>Parameters</h4>
+
+                    <table>
+                    <tr>
+                <td><abbr title="Guzzle\Common\Event">Event</abbr></td>
+                <td>$event</td>
+                <td>
+</td>
+            </tr>
+            </table>
+
+            
+            
+            
+                    </div>
+    </div>
+
+                <h3 id="method_getConfig">
+        <div class="location">at line 162</div>
+        <code>            public            
+    <strong>getConfig</strong>($key)</code>
+    </h3>
+    <div class="details">
+        <p>
+</p>
+        <p>
+</p>
+        <div class="tags">
+                            <h4>Parameters</h4>
+
+                    <table>
+                    <tr>
+                <td></td>
+                <td>$key</td>
+                <td>
+</td>
+            </tr>
+            </table>
+
+            
+            
+            
+                    </div>
+    </div>
+
+    
+            </div>
+            <div id="footer">
+        Generated by <a href="http://sami.sensiolabs.org/" target="_top">Sami, the API Documentation Generator</a>.
+    </div>
+    </body>
+</html>

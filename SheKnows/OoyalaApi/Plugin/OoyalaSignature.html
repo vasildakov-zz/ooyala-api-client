@@ -3,7 +3,7 @@
     <head>
         <meta charset="UTF-8" />
         <meta name="robots" content="index, follow, all" />
-        <title>SheKnows\OoyalaApi\Plugin\OoyalaSignature | SheKnows Ooyala API Client</title>
+        <title>SheKnows\OoyalaApi\Plugin\OoyalaSignature | </title>
                     <link rel="stylesheet" type="text/css" href="../../../stylesheet.css">
                             </head>
         <body id="class">
@@ -12,17 +12,19 @@
             <li><a href="../../../classes.html">Classes</a></li>
                             <li><a href="../../../namespaces.html">Namespaces</a></li>
                         <li><a href="../../../interfaces.html">Interfaces</a></li>
+            <li><a href="../../../traits.html">Traits</a></li>
             <li><a href="../../../doc-index.html">Index</a></li>
             
         </ul>
 
-        <div id="title">SheKnows Ooyala API Client</div>
+        <div id="title"></div>
 
             <div class="type">Class</div>
     <h1><a href="../../../SheKnows/OoyalaApi/Plugin.html">SheKnows\OoyalaApi\Plugin</a>\OoyalaSignature</h1>
     </div>
         <div class="content">
-                <p>class    <strong>OoyalaSignature</strong>        implements
+                <p>    class
+    <strong>OoyalaSignature</strong>        implements
         <abbr title="Symfony\Component\EventDispatcher\EventSubscriberInterface">EventSubscriberInterface</abbr></p>
 
             <div class="description">
@@ -51,7 +53,8 @@
                 </td>
                 <td class="last">
                     <a href="#method_getSubscribedEvents">getSubscribedEvents</a>()
-                    <p></p>
+                    <p>
+</p>
                 </td>
                 <td></td>
             </tr>
@@ -62,6 +65,16 @@
                 <td class="last">
                     <a href="#method_onRequestBeforeSend">onRequestBeforeSend</a>(<abbr title="Guzzle\Common\Event">Event</abbr> $event)
                     <p>Sign every request before sending.</p>
+                </td>
+                <td></td>
+            </tr>
+                    <tr>
+                <td class="type">
+                    
+                </td>
+                <td class="last">
+                    <a href="#method_onCommandBeforeSend">onCommandBeforeSend</a>(<abbr title="Guzzle\Common\Event">Event</abbr> $event)
+                    <p>Event listener to set required 'api_key' and 'expires' params before sending the request.</p>
                 </td>
                 <td></td>
             </tr>
@@ -77,7 +90,8 @@
     </h3>
     <div class="details">
         <p>Constructor.</p>
-        <p></p>
+        <p>
+</p>
         <div class="tags">
                             <h4>Parameters</h4>
 
@@ -101,8 +115,10 @@
     <strong>getSubscribedEvents</strong>()</code>
     </h3>
     <div class="details">
-        <p></p>
-        <p></p>
+        <p>
+</p>
+        <p>
+</p>
         <div class="tags">
             
                             <h4>Return Value</h4>
@@ -120,13 +136,14 @@
     </div>
 
                 <h3 id="method_onRequestBeforeSend">
-        <div class="location">at line 44</div>
+        <div class="location">at line 45</div>
         <code>            public            
     <strong>onRequestBeforeSend</strong>(<abbr title="Guzzle\Common\Event">Event</abbr> $event)</code>
     </h3>
     <div class="details">
         <p>Sign every request before sending.</p>
-        <p></p>
+        <p>
+</p>
         <div class="tags">
                             <h4>Parameters</h4>
 
@@ -134,7 +151,33 @@
                     <tr>
                 <td><abbr title="Guzzle\Common\Event">Event</abbr></td>
                 <td>$event</td>
-                <td>The `request.before_send` event object.</td>
+                <td>The <code>request.before_send</code> event object.</td>
+            </tr>
+            </table>
+
+            
+            
+            
+                    </div>
+    </div>
+
+                <h3 id="method_onCommandBeforeSend">
+        <div class="location">at line 59</div>
+        <code>            public            
+    <strong>onCommandBeforeSend</strong>(<abbr title="Guzzle\Common\Event">Event</abbr> $event)</code>
+    </h3>
+    <div class="details">
+        <p>Event listener to set required 'api_key' and 'expires' params before sending the request.</p>
+        <p>
+</p>
+        <div class="tags">
+                            <h4>Parameters</h4>
+
+                    <table>
+                    <tr>
+                <td><abbr title="Guzzle\Common\Event">Event</abbr></td>
+                <td>$event</td>
+                <td>A <code>command.before_send</code> event.</td>
             </tr>
             </table>
 

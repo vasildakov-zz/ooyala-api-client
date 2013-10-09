@@ -3,7 +3,7 @@
     <head>
         <meta charset="UTF-8" />
         <meta name="robots" content="index, follow, all" />
-        <title>SheKnows\OoyalaApi\OoyalaClient | SheKnows Ooyala API Client</title>
+        <title>SheKnows\OoyalaApi\OoyalaClient | </title>
                     <link rel="stylesheet" type="text/css" href="../../stylesheet.css">
                             </head>
         <body id="class">
@@ -12,23 +12,38 @@
             <li><a href="../../classes.html">Classes</a></li>
                             <li><a href="../../namespaces.html">Namespaces</a></li>
                         <li><a href="../../interfaces.html">Interfaces</a></li>
+            <li><a href="../../traits.html">Traits</a></li>
             <li><a href="../../doc-index.html">Index</a></li>
             
         </ul>
 
-        <div id="title">SheKnows Ooyala API Client</div>
+        <div id="title"></div>
 
             <div class="type">Class</div>
     <h1><a href="../../SheKnows/OoyalaApi.html">SheKnows\OoyalaApi</a>\OoyalaClient</h1>
     </div>
         <div class="content">
-                <p>class    <strong>OoyalaClient</strong>        extends <abbr title="Guzzle\Service\Client">Client</abbr></p>
+                <p>    class
+    <strong>OoyalaClient</strong>        extends <abbr title="Guzzle\Service\Client">Client</abbr></p>
 
             <div class="description">
             <p>Ooyala Http client.</p>
-            <p></p>
+            <p>
+</p>
         </div>
     
+            <h2>Constants</h2>
+
+            <table>
+                    <tr>
+                <td>EVENT_INITIALIZED</td>
+                <td class="last">
+                    <p><em>OoyalaClient initialization event</em></p>
+                    <p>Allows 1st party plugins to add configuration.</p>
+                </td>
+            </tr>
+            </table>
+
     
     
             <h2>Methods</h2>
@@ -40,17 +55,7 @@
                 </td>
                 <td class="last">
                     <a href="#method_factory">factory</a>(array $config = array())
-                    <p></p>
-                </td>
-                <td></td>
-            </tr>
-                    <tr>
-                <td class="type">
-                    
-                </td>
-                <td class="last">
-                    <a href="#method_onCommandBeforeSend">onCommandBeforeSend</a>(<abbr title="Guzzle\Common\Event">Event</abbr> $event)
-                    <p>Event listener to set required &#039;api_key&#039; and &#039;expires&#039; params before sending the request.</p>
+                    <p>Factory method for creating a new client.</p>
                 </td>
                 <td></td>
             </tr>
@@ -60,13 +65,14 @@
         <h2>Details</h2>
 
                         <h3 id="method_factory">
-        <div class="location">at line 39</div>
+        <div class="location">at line 51</div>
         <code>        static    public            <abbr title="Guzzle\Service\Client">Client</abbr>|<a href="../../SheKnows/OoyalaApi/OoyalaClient.html"><abbr title="SheKnows\OoyalaApi\OoyalaClient">OoyalaClient</abbr></a>
     <strong>factory</strong>(array $config = array())</code>
     </h3>
     <div class="details">
-        <p></p>
-        <p></p>
+        <p>Factory method for creating a new client.</p>
+        <p>
+</p>
         <div class="tags">
                             <h4>Parameters</h4>
 
@@ -74,7 +80,7 @@
                     <tr>
                 <td>array</td>
                 <td>$config</td>
-                <td>Collection settings. The `api_key` and `api_secret` config values are required.</td>
+                <td>Collection settings. The <code>api_key</code> and <code>api_secret</code> config values are required.</td>
             </tr>
             </table>
 
@@ -84,35 +90,11 @@
                     <table>
         <tr>
             <td><abbr title="Guzzle\Service\Client">Client</abbr>|<a href="../../SheKnows/OoyalaApi/OoyalaClient.html"><abbr title="SheKnows\OoyalaApi\OoyalaClient">OoyalaClient</abbr></a></td>
-            <td>Instance of the Ooyala client.</td>
+            <td>
+</td>
         </tr>
     </table>
 
-            
-            
-                    </div>
-    </div>
-
-                <h3 id="method_onCommandBeforeSend">
-        <div class="location">at line 72</div>
-        <code>            public            
-    <strong>onCommandBeforeSend</strong>(<abbr title="Guzzle\Common\Event">Event</abbr> $event)</code>
-    </h3>
-    <div class="details">
-        <p>Event listener to set required &#039;api_key&#039; and &#039;expires&#039; params before sending the request.</p>
-        <p></p>
-        <div class="tags">
-                            <h4>Parameters</h4>
-
-                    <table>
-                    <tr>
-                <td><abbr title="Guzzle\Common\Event">Event</abbr></td>
-                <td>$event</td>
-                <td>A `command.before_send` event.</td>
-            </tr>
-            </table>
-
-            
             
             
                     </div>
