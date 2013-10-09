@@ -4,6 +4,7 @@
     "license": "MIT",
     "description": "Guzzle library for the Ooyala REST Api.",
     "keywords": ["guzzle", "ooyala"],
+    "version": "1.0",
     "authors": [
         {
             "name": "SheKnows Dev",
