@@ -18,7 +18,7 @@ class OoyalaClientTest extends BaseTestCase
 
     /**
      * @expectedException Guzzle\Common\Exception\InvalidArgumentException
-     * @expectedExceptionMessage Config must contain a 'api_key' key
+     * @expectedExceptionMessage Config is missing the following keys: api_key, api_secret
      */
     public function testMissingRequiredParametersThrowsException()
     {
@@ -27,11 +27,28 @@ class OoyalaClientTest extends BaseTestCase
 
     /**
      * @expectedException Guzzle\Common\Exception\InvalidArgumentException
-     * @expectedExceptionMessage Config must contain a 'api_secret' key
+     * @expectedExceptionMessage Config is missing the following keys: api_secret
      */
     public function testMissingApiSecretThrowsException()
     {
         OoyalaClient::factory(array('api_key' => '123'));
+    }
+
+    /**
+     * Test to make sure configuration can override the service definition.
+     */
+    public function testBaseUrlServiceOverride()
+    {
+        $baseUrl = 'https://custom-base.com/{api_version}';
+        $baseUrlExpected = 'https://custom-base.com/v2';
+        $client = OoyalaClient::factory(array(
+            'api_key' => '123',
+            'api_secret' => '456',
+            'api_version' => 'v2',
+            'base_url' => $baseUrl,
+        ));
+
+        $this->assertEquals($baseUrlExpected, $client->getBaseUrl());
     }
 
     public function testValidClientInstanceWhenRequiredParametersPresent()
@@ -193,5 +210,55 @@ class OoyalaClientTest extends BaseTestCase
             $request->getQuery()->get('expires'),
             "The 'expires' param passed to Client::getCommand() should be used, not the OoyalaClient::onRequestBeforeSend() default."
         );
+    }
+
+    /**
+     * @group cache
+     * @group internet
+     */
+    public function testCachedResponse()
+    {
+        $client = $this->getCacheEnabledClient();
+
+        $doRequest = function () use ($client) {
+            static $unique;
+
+            if (!$unique) {
+                $unique = time();
+            }
+
+            $beforeSend = function (\Guzzle\Common\Event $event) use ($unique) {
+                /** @var $request \Guzzle\Http\Message\Request */
+                $request = $event['request'];
+                // Make this unique so it will not match the cache key.
+                $request->getQuery()->add('unique', $unique);
+            };
+
+            $client->getEventDispatcher()->addListener('request.before_send', $beforeSend);
+            $command = $client->getCommand('GetAssets');
+            $command->execute();
+
+            $client->getEventDispatcher()->removeListener('request.before_send', $beforeSend);
+
+            return $command;
+        };
+
+        /** @var \Guzzle\Service\Command\CommandInterface $return */
+        $return = $doRequest();
+        $responseHeaders = $return->getResponse()->getHeaders();
+        $this->assertEquals('MISS from GuzzleCache', $responseHeaders->get('X-Cache-Lookup'));
+        $this->assertEquals('MISS from GuzzleCache', $responseHeaders->get('X-Cache'));
+        $firstResponse = (string) $return->getResponse()->getBody();
+
+        // The cache plugin should set the cached response.
+        /** @var \Guzzle\Service\Command\CommandInterface $return */
+        $cachedResponse = $doRequest();
+        $responseHeaders = $cachedResponse->getResponse()->getHeaders();
+        $this->assertEquals('HIT from GuzzleCache', $responseHeaders->get('X-Cache-Lookup'));
+        $this->assertEquals('HIT from GuzzleCache', $responseHeaders->get('X-Cache'));
+        $secondResponse = (string) $cachedResponse->getResponse()->getBody();
+
+        // Assert the same response body
+        $this->assertEquals($firstResponse, $secondResponse);
     }
 }

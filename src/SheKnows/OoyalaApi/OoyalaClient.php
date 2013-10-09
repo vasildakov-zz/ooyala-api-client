@@ -2,12 +2,15 @@
 
 namespace SheKnows\OoyalaApi;
 
-use SheKnows\OoyalaApi\Plugin\OoyalaSignature;
-
+use Guzzle\Http\Message\Request;
+use Guzzle\Http\Message\Response;
 use Guzzle\Service\Client;
 use Guzzle\Common\Event;
 use Guzzle\Service\Description\ServiceDescription;
 use Guzzle\Common\Collection;
+
+use SheKnows\OoyalaApi\Plugin\OoyalaCache;
+use SheKnows\OoyalaApi\Plugin\OoyalaSignature;
 
 /**
  * Ooyala Http client.
@@ -16,6 +19,13 @@ use Guzzle\Common\Collection;
  */
 class OoyalaClient extends Client
 {
+
+    /**
+     * OoyalaClient initialization event
+     *
+     * Allows 1st party plugins to add configuration.
+     */
+    const EVENT_INITIALIZED = 'ooyala.client.initialized';
 
     /**
      * Ooyala API key.
@@ -32,19 +42,15 @@ class OoyalaClient extends Client
     private $apiSecret;
 
     /**
-     * @param array $config Collection settings. The `api_key` and `api_secret` config values are required.
+     * Factory method for creating a new client.
      *
-     * @return \Guzzle\Service\Client|OoyalaClient Instance of the Ooyala client.
+     * @param array $config  Collection settings. The `api_key` and `api_secret` config values are required.
+     *
+     * @return Client|OoyalaClient
      */
     public static function factory($config = array())
     {
-        $defaults = array(
-            'base_url' => 'https://api.ooyala.com/{api_version}',
-            'api_version' => 'v2',
-        );
-
-        $required = array('api_key', 'api_secret');
-        $config = Collection::fromConfig($config, $defaults, $required);
+        $config = self::processConfig($config);
         $client = new self($config->get('base_url'), $config);
 
         // Set key/secret for convenience
@@ -54,33 +60,30 @@ class OoyalaClient extends Client
         // Service description
         $apiVersion = $config->get('api_version');
         $description = ServiceDescription::factory(__DIR__ . "/client-{$apiVersion}.json");
-        $client->setDescription($description);
 
-        $client->getEventDispatcher()->addListener('command.before_send', array(&$client, 'onCommandBeforeSend'), 0);
-
-        // OoyalaSignature plugin for singing requests.
-        $client->addSubscriber(new OoyalaSignature($client->apiSecret));
+        $client
+            ->setDescription($description)
+            ->addSubscriber(new OoyalaSignature($client->apiSecret))
+            ->addSubscriber(new OoyalaCache())
+            ->dispatch(OoyalaClient::EVENT_INITIALIZED, array('client' => $client))
+        ;
 
         return $client;
     }
 
-    /**
-     * Event listener to set required 'api_key' and 'expires' params before sending the request.
-     *
-     * @param \Guzzle\Common\Event $event A `command.before_send` event.
-     */
-    public function onCommandBeforeSend(Event $event)
+    private static function processConfig(array $config = array())
     {
-        /** @var $command \Guzzle\Service\Command\OperationCommand */
-        $command = $event['command'];
-        /** @var $request \Guzzle\Http\Message\Request */
-        $request = $command->getRequest();
+        $defaults = array(
+            'base_url' => 'https://api.ooyala.com/{api_version}',
+            'api_version' => 'v2',
+            'request.options' => array(
+                'timeout' => 4,
+                'connect_timeout' => 2,
+            ),
+        );
 
-        $query = $request->getQuery();
-        $query->set('api_key', $this->apiKey);
+        $required = array('api_key', 'api_secret');
 
-        if (!$command->hasKey('expires')) {
-            $query->set('expires', strtotime('+15 minutes'));
-        }
+        return Collection::fromConfig($config, $defaults, $required);
     }
 }
